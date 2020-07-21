@@ -1,0 +1,35 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build & Run",
+      "type": "shell",
+      "command": "g++ -c src/*.cpp  -std=c++11 -stdlib=libc++ -I ~/SFML/include && g++ -o sfml-app *.o -lsfml-graphics -lsfml-window -lsfml-system && ./sfml-app",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "type": "shell",
+      "label": "Clean",
+      "command": "rm -f *.o sfml-app",
+      "group": "test"
+    },
+    {
+      "type": "shell",
+      "label": "clang++ build active file",
+      "command": "/usr/bin/clang++",
+      "args": [
+        "-g",
+        "${file}",
+        "-o",
+        "${fileDirname}/${fileBasenameNoExtension}"
+      ],
+      "options": {
+        "cwd": "/usr/bin"
+      }
+    }
+  ]
+}

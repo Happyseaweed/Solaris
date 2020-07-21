@@ -49,6 +49,10 @@ class solaris {
 
 		// Titlescreen
 		RectangleShape playButton;
+		bool playPressed;
+
+		// Ship
+		RectangleShape background;
 
 
 
@@ -87,3 +91,5 @@ class solaris {
 		void update();
 		void pollEvents();
 };
+
+void change_state();

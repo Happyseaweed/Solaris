@@ -74,6 +74,12 @@ void solaris::initVariables(){
     this->playButton.setSize(Vector2f(500, 250));
     this->playButton.setPosition(690, 690);
     this->playButton.setFillColor(Color::White);
+    this->playPressed = false;
+
+    // Ship
+    this->background.setSize(Vector2f(SCREEN_WIDTH, SCREEN_HEIGHT));
+    this->background.setPosition(Vector2f(0, 0));
+    this->background.setFillColor(sf::Color::Red);
 
 }
 
@@ -98,6 +104,7 @@ void solaris::pollEvents(){
     // Event polling;
 
     while(this->window->pollEvent(this->event)){
+        //titlescreen_update();
         switch(event.type){
             case Event::Closed:
                 this->window->close();
@@ -108,6 +115,8 @@ void solaris::pollEvents(){
             break;
         }
     }
+
+
 }
 
 // Title Screen --------------------------------------------------------------//
@@ -116,8 +125,10 @@ void solaris::titlescreen_logic(){
     // Mouse clicks the button
     if (playButton.getGlobalBounds().contains(Mouse::getPosition(*this->window).x, Mouse::getPosition(*this->window).y) ){
 
-        cout << "ahmed has small pp" << endl;
-        nextState = SHIP;
+        if (playPressed) {
+            cout << "ahmed has small pp" << endl;
+            nextState = SHIP;
+        }
     }
 
 }
@@ -130,6 +141,14 @@ void solaris::titlescreen_render(){
 }
 
 void solaris::titlescreen_update(){
+    switch(event.type){
+        case sf::Event::MouseButtonPressed:
+            playPressed = true;
+            break;
+        case sf::Event::MouseButtonReleased:
+            playPressed = false;
+            break;
+    }
 
 }
 
@@ -167,7 +186,9 @@ void solaris::ship_logic(){
 }
 
 void solaris::ship_render(){
-
+    this->window->clear();
+    this->window->draw(this->background);
+    this->window->display();
 }
 
 void solaris::ship_update(){
@@ -178,21 +199,36 @@ void solaris::ship_update(){
 //  Main Update Function
 void solaris::update(){
     this->pollEvents();
+    switch (gameState) {
+        case TITLESCREEN:
+            titlescreen_update();
+            break;
+        case SHIP:
+            ship_update();
+            break;
+    }
 }
 // Main Logic Function
 void solaris::logic(){
     switch (gameState) {
         case TITLESCREEN:
             titlescreen_logic();
+            break;
+        case SHIP:
+            ship_logic();
+            break;
     }
 }
 // Render functions
 void solaris::render(){
-
-
     switch (gameState) {
         case TITLESCREEN:
             titlescreen_render();
+            break;
+        case SHIP:
+            ship_render();
+            break;
+
     }
 
 

@@ -1,0 +1,4 @@
+.DS_Store
+sfml-app
+main.o
+driver.o

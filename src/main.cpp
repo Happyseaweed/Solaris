@@ -31,7 +31,10 @@ int main(){
 
         // Logic
         MAIN.logic();
-        
+
+        // Change the state if necessary
+        change_state();
+
         // Render
         MAIN.render();
     }

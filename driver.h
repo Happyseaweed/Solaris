@@ -1,8 +1,8 @@
-#include <iostream> 
-#include <string> 
-#include <cstring> 
+#include <iostream>
+#include <string>
+#include <cstring>
 #include <vector>
-#include <cstdlib> 
+#include <cstdlib>
 #include <cstdio>
 #include <queue>
 #include <algorithm>
@@ -23,8 +23,8 @@
 
 // Personal Preference stuff:
 #define ll long long
-#define SCREEN_WIDTH 512
-#define SCREEN_HEIGHT 512
+#define SCREEN_WIDTH 3200
+#define SCREEN_HEIGHT 2400
 
 //Namespaces
 using namespace std;
@@ -42,9 +42,15 @@ class solaris {
 		// Private Functions;
 		void initVariables();
 		void initWindow();
+		void initAhmedSmallPP();
 
 		// Private variables;
-		// ahmed has a small pp
+		Font font;
+
+		// Titlescreen
+		RectangleShape playButton;
+
+
 
 
 	public:
@@ -54,42 +60,30 @@ class solaris {
 		// Window running boolean
 		const bool running() const;
 
+		// Gamestate function declaration
+		// Title screen
+		void titlescreen_logic();
+		void titlescreen_render();
+		void titlescreen_update();
+
+		// Paused
+		void paused_logic();
+		void paused_render();
+		void paused_update();
+
+		// Overworld
+		void overworld_logic();
+		void overworld_render();
+		void overworld_update();
+
+		// Ship
+		void ship_logic();
+		void ship_render();
+		void ship_update();
+
 		// Public Functions
-		void update();
+		void logic();
 		void render();
+		void update();
 		void pollEvents();
-
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

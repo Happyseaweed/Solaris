@@ -1,8 +1,8 @@
-#include <iostream> 
-#include <string> 
-#include <cstring> 
+#include <iostream>
+#include <string>
+#include <cstring>
 #include <vector>
-#include <cstdlib> 
+#include <cstdlib>
 #include <cstdio>
 #include <queue>
 #include <algorithm>

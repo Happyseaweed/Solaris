@@ -63,17 +63,40 @@ class solaris {
 		
 
 		// Ship
+<<<<<<< HEAD
+		Texture backgroundTex;
+		Sprite background;
+		Sprite ship; // Technically the player sprite
+		Texture shipTex;
+		Vector2f shipVel;
+=======
 		RectangleShape background;
 		RectangleShape ship;
 		Vector2f shipVel;
 
+>>>>>>> b081b8f0b4ce1b89ab5e98ab4574193f21a2f3ce
 		Vector2f shipAcc;
 		float shipRotVel;
 		float shipRotAcc;
 		Vector2f dir;
 		void shipApplyForce(Vector2f force);
 		void shipRotateForce(float d);
+<<<<<<< HEAD
+		void set_camera();
+		View camera;
+		float SPACE_WIDTH;
+		float SPACE_HEIGHT;
+		float shipSpeed;
 
+
+		// Paused variable
+		RectangleShape pausedBackground;
+
+		RectangleShape resumeButton, quitPause;
+		Text resumeText, quitPauseText;
+=======
+
+>>>>>>> b081b8f0b4ce1b89ab5e98ab4574193f21a2f3ce
 	public:
 		solaris();
 		virtual ~solaris();

@@ -23,8 +23,8 @@
 
 // Personal Preference stuff:
 #define ll long long
-#define SCREEN_WIDTH 3200
-#define SCREEN_HEIGHT 2400
+#define SCREEN_WIDTH VideoMode::getDesktopMode().width
+#define SCREEN_HEIGHT VideoMode::getDesktopMode().height
 
 //Namespaces
 using namespace std;
@@ -32,6 +32,7 @@ using namespace sf;
 
 #pragma once;
 
+// Solaris class
 class solaris {
 	private:
 		// Windows & Events
@@ -46,16 +47,32 @@ class solaris {
 
 		// Private variables;
 		Font font;
+		Clock clock;
+		float dt;
 
-		// Titlescreen
+
+		// Titlescreen Variables
 		RectangleShape playButton;
-		bool playPressed;
+		RectangleShape quitButton;
+		
+		Text mainTitles;
+		Text playText;
+		Text quitText;
+		
+		bool pressed;
+		
 
 		// Ship
 		RectangleShape background;
+		RectangleShape ship;
+		Vector2f shipVel;
 
-
-
+		Vector2f shipAcc;
+		float shipRotVel;
+		float shipRotAcc;
+		Vector2f dir;
+		void shipApplyForce(Vector2f force);
+		void shipRotateForce(float d);
 
 	public:
 		solaris();

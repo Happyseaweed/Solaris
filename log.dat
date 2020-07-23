@@ -20,6 +20,12 @@ UI:
 
 Changes log (newest at the top please!):
 
+July.23.2020 - Ahmed
+1. Add ship and ship movement
+2. Added the asteroid sprite
+3. Changed ship functions
+4. Collision not working for borders
+
 July.22.2020 - Ahmed & Siwei
 1. Added fonts
 2. Added button

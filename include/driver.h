@@ -45,7 +45,6 @@ class solaris {
 		// Private Functions;
 		void initVariables();
 		void initWindow();
-		void initAhmedSmallPP();
 
 		// Private variables;
 		Font font;

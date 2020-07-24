@@ -32,6 +32,8 @@ using namespace sf;
 
 #pragma once;
 
+// if you see this, ahmed is gay & has small pp
+
 // Solaris class
 class solaris {
 	private:

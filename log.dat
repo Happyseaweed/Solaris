@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 \[]-------------------- Game & Changes Log --------------------[]
-=======
-[]-------------------- Game & Changes Log --------------------[]
->>>>>>> b081b8f0b4ce1b89ab5e98ab4574193f21a2f3ce
 Format:
   [date]-[name of author]
   [UX]
@@ -23,16 +19,18 @@ UI:
 []--------------------                    --------------------[]
 
 Changes log (newest at the top please!):
+July.24.2020 - Ahmed
+1. None
+2. None
+3. None
+4. Fixed Paused screen bugs
 
-<<<<<<< HEAD
 July.23.2020 - Siwei & Ahmed
 1. Added camera movement & player movement
 2. Created Pause screen, added player-front sprite
 3. Changed Player movement, changed camera movement
 4. Try Collision?
 
-=======
->>>>>>> b081b8f0b4ce1b89ab5e98ab4574193f21a2f3ce
 July.23.2020 - Ahmed
 1. Add ship and ship movement
 2. Added the asteroid sprite

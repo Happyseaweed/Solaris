@@ -69,7 +69,6 @@ void solaris::initVariables(){
     this->window = nullptr;
 
     this->font.loadFromFile("media/zero_hour.ttf");
-<<<<<<< HEAD
 // Paused
     // resume button
     this->resumeButton.setSize(Vector2f(500, 180));
@@ -95,28 +94,19 @@ void solaris::initVariables(){
     this->quitPauseText.setFont(font);
     this->quitPauseText.setCharacterSize(69);
     this->quitPauseText.setFillColor(Color::Black);
-    this->quitPauseText.setString("RESUME");
+    this->quitPauseText.setString("QUIT");
     bounds = quitPauseText.getLocalBounds();
     this->quitPauseText.setPosition((SCREEN_WIDTH - bounds.width)/2, this->quitPause.getPosition().y+50);
-=======
->>>>>>> b081b8f0b4ce1b89ab5e98ab4574193f21a2f3ce
 
 // Titlescreen
     // Main Title
     this->mainTitles.setFont(font);
     this->mainTitles.setCharacterSize(150);
     this->mainTitles.setString("SoLARiS - Beta");
-<<<<<<< HEAD
     bounds = mainTitles.getLocalBounds();
     this->mainTitles.setPosition((SCREEN_WIDTH - bounds.width)/2, 400);
     this->mainTitles.setFillColor(Color::White);
  
-=======
-    FloatRect bounds = mainTitles.getLocalBounds();
-    this->mainTitles.setPosition((SCREEN_WIDTH - bounds.width)/2, 400);
-    this->mainTitles.setFillColor(Color::White);
-
->>>>>>> b081b8f0b4ce1b89ab5e98ab4574193f21a2f3ce
     // PLay Button
     this->playButton.setSize(Vector2f(500, 180));
     this->playButton.setFillColor(Color::White);
@@ -148,7 +138,6 @@ void solaris::initVariables(){
     this->quitText.setPosition((SCREEN_WIDTH - bounds.width)/2, this->quitButton.getPosition().y+50);
 
 // Ship
-<<<<<<< HEAD
     this->backgroundTex.loadFromFile("media/bgimg.jpg");
     this->background.setTexture(backgroundTex);
     this->background.setPosition(Vector2f(0, 0));
@@ -166,14 +155,6 @@ void solaris::initVariables(){
     this->ship.setTexture(shipTex);
     this->ship.setOrigin(Vector2f(this->shipTex.getSize().x/2, this->shipTex.getSize().y/2 ));
     this->ship.setScale(Vector2f(5.0f, 5.0f));
-=======
-    this->background.setSize(Vector2f(SCREEN_WIDTH, SCREEN_HEIGHT));
-    this->background.setPosition(Vector2f(0, 0));
-    this->background.setFillColor(sf::Color::Red);
-
-    this->ship.setSize(Vector2f(100, 400));
-    this->ship.setOrigin(Vector2f(this->ship.getSize().x/2, this->ship.getSize().y/2 ));
->>>>>>> b081b8f0b4ce1b89ab5e98ab4574193f21a2f3ce
     this->ship.setPosition(250, 250);
     this->shipVel = Vector2f(0, 0);
     this->shipAcc = Vector2f(0, 0);
@@ -195,10 +176,6 @@ void solaris::initWindow(){
 
     // Frames
     this->window->setFramerateLimit(60);
-<<<<<<< HEAD
-
-=======
->>>>>>> b081b8f0b4ce1b89ab5e98ab4574193f21a2f3ce
 }
 
 
@@ -207,7 +184,6 @@ const bool solaris::running() const {
     return this->window->isOpen();
 }
 
-<<<<<<< HEAD
 void solaris::set_camera() {
     // Centering the camera
     camera.setCenter(ship.getPosition().x,
@@ -232,8 +208,6 @@ void solaris::set_camera() {
 }
 
 
-=======
->>>>>>> b081b8f0b4ce1b89ab5e98ab4574193f21a2f3ce
 // Event functions ----------------------------------------------------------- //
 void solaris::pollEvents(){
     // Event polling;
@@ -245,13 +219,9 @@ void solaris::pollEvents(){
                 this->window->close();
             case Event::KeyPressed:
                 if (this->event.key.code == Keyboard::Escape){
-<<<<<<< HEAD
                     if (gameState == TITLESCREEN) this->window->close();
                     else if (gameState == SHIP) nextState = PAUSED;
                     else if (gameState == PAUSED) nextState = SHIP;
-=======
-                    this->window->close();
->>>>>>> b081b8f0b4ce1b89ab5e98ab4574193f21a2f3ce
                 }
             break;
         }
@@ -268,6 +238,7 @@ void solaris::titlescreen_logic(){
 
         if (pressed) {
             cout << "ahmed has small pp" << endl;
+            pressed = false;
             nextState = SHIP;
         }
     }
@@ -305,20 +276,22 @@ void solaris::titlescreen_update(){
 // Pause Screen --------------------------------------------------------------//
 
 void solaris::paused_logic(){
-<<<<<<< HEAD
     if (resumeButton.getGlobalBounds().contains(Mouse::getPosition(*this->window).x, Mouse::getPosition(*this->window).y) ){
         if (pressed) {
-                nextState = SHIP;
-            }
+            pressed = false;
+            nextState = SHIP;
+        }
     }
     if (quitPause.getGlobalBounds().contains(Mouse::getPosition(*this->window).x, Mouse::getPosition(*this->window).y) ){
         if (pressed){
-            nextState = TITLESCREEN;
+            pressed = false;
+            this->window->close();
         }
     }
 }
 
 void solaris::paused_render(){
+    this->window->setView(this->window->getDefaultView());
     this->window->clear();
     this->window->draw(resumeButton);
     this->window->draw(resumeText);
@@ -328,35 +301,25 @@ void solaris::paused_render(){
 }
 
 void solaris::paused_update(){
-    this->window->setView(this->window->getDefaultView());
-=======
+    
 
-}
-
-void solaris::paused_render(){
-
-}
-
-void solaris::paused_update(){
-
->>>>>>> b081b8f0b4ce1b89ab5e98ab4574193f21a2f3ce
+    switch(event.type){
+        case sf::Event::MouseButtonPressed:
+            pressed = true;
+            break;
+        case sf::Event::MouseButtonReleased:
+            pressed = false;
+            break;
+    }
 }
 
 // OVERWORLD Screen-----------------------------------------------------------//
 
-<<<<<<< HEAD
 void solaris::overworld_logic() {
 
 }
 
 void solaris::overworld_render() {
-=======
-void solaris::overworld_logic(){
-
-}
-
-void solaris::overworld_render(){
->>>>>>> b081b8f0b4ce1b89ab5e98ab4574193f21a2f3ce
 
 }
 
@@ -372,7 +335,6 @@ void solaris::ship_logic(){
         this->shipVel.y = 0; 
      } else {
         // movement for ship
-<<<<<<< HEAD
         if (Keyboard::isKeyPressed(Keyboard::Key::W)){
             shipApplyForce(Vector2f(0, -shipSpeed));
         }
@@ -391,23 +353,16 @@ void solaris::ship_logic(){
         if (Keyboard::isKeyPressed(Keyboard::Key::E)) {
             shipRotateForce(0.5);
         }
-=======
-        if (Keyboard::isKeyPressed(Keyboard::Key::Space)){
-            this->shipVel.x = dir.x * 10.0f;
-            this->shipVel.y = dir.y * 10.0f;
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Key::A)) {
-            shipRotateForce(-0.5);
-        } if (Keyboard::isKeyPressed(Keyboard::Key::D)) {
-            shipRotateForce(0.5);
-        }
-
->>>>>>> b081b8f0b4ce1b89ab5e98ab4574193f21a2f3ce
      }
     
 }
 
 void solaris::ship_render(){
+    // set the camera
+    set_camera();
+    this->window->setView(camera);
+
+    // drawing scene
     this->window->clear();
     this->window->draw(this->background);
     this->window->draw(this->ship);
@@ -415,15 +370,11 @@ void solaris::ship_render(){
 }
 
 void solaris::ship_update(){
-<<<<<<< HEAD
-    this->window->setView(camera);
-=======
->>>>>>> b081b8f0b4ce1b89ab5e98ab4574193f21a2f3ce
+    
     // getting direction
     dir.y = -std::cos(( this->ship.getRotation() * 3.14) / 180);
     dir.x = std::sin(( this->ship.getRotation() * 3.14) / 180);
 
-<<<<<<< HEAD
 
     // applying the forces
     if (abs(shipVel.x) < 2 && abs(shipVel.y) < 2){
@@ -443,10 +394,6 @@ void solaris::ship_update(){
         this->shipTex.loadFromFile("media/astronaut-Solaris.png");
         this->ship.setTexture(shipTex);
     }
-=======
-    // applying the forces
-    this->shipRotVel += this->shipRotAcc;
->>>>>>> b081b8f0b4ce1b89ab5e98ab4574193f21a2f3ce
 
     // move/rotate ship
     this->ship.rotate(this->shipRotVel);
@@ -456,7 +403,6 @@ void solaris::ship_update(){
     this->shipVel.x *= 0.99;
     this->shipVel.y *= 0.99;
     this->shipRotVel *= 0.8;
-<<<<<<< HEAD
     if (abs(this->shipVel.x) < 0.1) this->shipVel.x = 0;
     if (abs(this->shipVel.y) < 0.1) this->shipVel.y = 0;
 
@@ -466,11 +412,7 @@ void solaris::ship_update(){
     this->shipAcc.x = 0;
     this->shipAcc.y = 0;
 
-    // set the camera
-    set_camera();
-=======
-    this->shipRotAcc = 0;
->>>>>>> b081b8f0b4ce1b89ab5e98ab4574193f21a2f3ce
+    
 }
 
 
@@ -485,6 +427,9 @@ void solaris::update(){
         case SHIP:
             ship_update();
             break;
+        case PAUSED:
+            paused_update();
+            break;
     }
 }
 // Main Logic Function
@@ -495,6 +440,9 @@ void solaris::logic(){
             break;
         case SHIP:
             ship_logic();
+            break;
+        case PAUSED:
+            paused_logic();
             break;
     }
 }
@@ -507,12 +455,9 @@ void solaris::render(){
         case SHIP:
             ship_render();
             break;
-<<<<<<< HEAD
         case PAUSED:
             paused_render();
             break;
-=======
->>>>>>> b081b8f0b4ce1b89ab5e98ab4574193f21a2f3ce
 
     }
 

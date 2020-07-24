@@ -330,10 +330,12 @@ void solaris::overworld_update(){
 // SHIP Screen----------------------------------------------------------------//
 void solaris::ship_logic(){
     // collison for walls
-     if (this->ship.getLocalBounds().top < 0 || this->ship.getLocalBounds().top > SCREEN_HEIGHT){
-        this->shipVel.x = 0;
-        this->shipVel.y = 0; 
-     } else {
+    if (this->ship.getGlobalBounds().top < 0 || this->ship.getGlobalBounds().top+this->ship.getGlobalBounds().height > SPACE_HEIGHT){
+        this->shipVel.y *= -2; 
+    } 
+    else if (this->ship.getGlobalBounds().left < 0 || this->ship.getGlobalBounds().left+this->ship.getGlobalBounds().width > SPACE_WIDTH){
+        this->shipVel.x *= -2;
+    } else {
         // movement for ship
         if (Keyboard::isKeyPressed(Keyboard::Key::W)){
             shipApplyForce(Vector2f(0, -shipSpeed));

@@ -26,6 +26,7 @@ enum States {
     PAUSED,
     OVERWORLD,
     SHIP,
+    OUTERSPACE,
     STATE_NULL
 };
 
@@ -48,8 +49,8 @@ void change_state() {
             case OVERWORLD:
                 gameState = OVERWORLD;
                 nextState = STATE_NULL;
-            case SHIP:
-                gameState = SHIP;
+            case OUTERSPACE:
+                gameState = OUTERSPACE;
                 nextState = STATE_NULL;
         }
     }
@@ -139,9 +140,9 @@ void solaris::initVariables(){
 
 // Ship
     this->backgroundTex.loadFromFile("media/bgimg.jpg");
-    this->background.setTexture(backgroundTex);
-    this->background.setPosition(Vector2f(0, 0));
-    this->shipSpeed = 0.5;
+    this->spaceBackground.setTexture(backgroundTex);
+    this->spaceBackground.setPosition(Vector2f(0, 0));
+    this->astroSpeed = 0.5;
 
     
     // Moving Camera Section
@@ -151,22 +152,22 @@ void solaris::initVariables(){
     this->camera.setSize(Vector2f(SCREEN_WIDTH/2.5, SCREEN_HEIGHT/2.5));
 
     // Loading texture
-    this->shipTex.loadFromFile("media/astronaut-Solaris.png");
-    this->ship.setTexture(shipTex);
-    this->ship.setOrigin(Vector2f(this->shipTex.getSize().x/2, this->shipTex.getSize().y/2 ));
-    this->ship.setScale(Vector2f(5.0f, 5.0f));
-    this->ship.setPosition(250, 250);
-    this->shipVel = Vector2f(0, 0);
-    this->shipAcc = Vector2f(0, 0);
+    this->astroTex.loadFromFile("media/astronaut-Solaris.png");
+    this->astro.setTexture(astroTex);
+    this->astro.setOrigin(Vector2f(this->astroTex.getSize().x/2, this->astroTex.getSize().y/2 ));
+    this->astro.setScale(Vector2f(5.0f, 5.0f));
+    this->astro.setPosition(250, 250);
+    this->astroVel = Vector2f(0, 0);
+    this->astroAcc = Vector2f(0, 0);
 
 }
 
-void solaris::shipApplyForce(Vector2f force) {
-    this->shipAcc += force;
+void solaris::astroApplyForce(Vector2f force) {
+    this->astroAcc += force;
 }
 
-void solaris::shipRotateForce(float d) {
-    this->shipRotAcc += d;
+void solaris::astroRotateForce(float d) {
+    this->astroRotAcc += d;
 }
 void solaris::initWindow(){
     // Window
@@ -186,8 +187,8 @@ const bool solaris::running() const {
 
 void solaris::set_camera() {
     // Centering the camera
-    camera.setCenter(ship.getPosition().x,
-                     ship.getPosition().y);
+    camera.setCenter(astro.getPosition().x,
+                     astro.getPosition().y);
     
     // Checking for camera going out of bounds
     if (camera.getCenter().x - camera.getSize().x/2 < 0){
@@ -220,7 +221,7 @@ void solaris::pollEvents(){
             case Event::KeyPressed:
                 if (this->event.key.code == Keyboard::Escape){
                     if (gameState == TITLESCREEN) this->window->close();
-                    else if (gameState == SHIP) nextState = PAUSED;
+                    else if (gameState == OUTERSPACE) nextState = PAUSED;
                     else if (gameState == PAUSED) nextState = SHIP;
                 }
             break;
@@ -234,16 +235,18 @@ void solaris::pollEvents(){
 
 void solaris::titlescreen_logic(){
     // Mouse clicks the button
+    // Play button
     if (playButton.getGlobalBounds().contains(Mouse::getPosition(*this->window).x, Mouse::getPosition(*this->window).y) ){
 
-        if (pressed) {
+        if (pressed) { // Clicks Play
             cout << "ahmed has small pp" << endl;
             pressed = false;
-            nextState = SHIP;
+            nextState = OUTERSPACE;
         }
     }
+    // Quit button
     if (quitButton.getGlobalBounds().contains(Mouse::getPosition(*this->window).x, Mouse::getPosition(*this->window).y) ){
-        if (pressed){
+        if (pressed){ // Clicks the quit button
             this->window->close();
         }
     }
@@ -276,12 +279,14 @@ void solaris::titlescreen_update(){
 // Pause Screen --------------------------------------------------------------//
 
 void solaris::paused_logic(){
+    // Resume button, when clicked, returns to previous state
     if (resumeButton.getGlobalBounds().contains(Mouse::getPosition(*this->window).x, Mouse::getPosition(*this->window).y) ){
         if (pressed) {
             pressed = false;
-            nextState = SHIP;
+            nextState = OUTERSPACE;
         }
     }
+    // Quit button, when clicked, quits the program
     if (quitPause.getGlobalBounds().contains(Mouse::getPosition(*this->window).x, Mouse::getPosition(*this->window).y) ){
         if (pressed){
             pressed = false;
@@ -301,7 +306,6 @@ void solaris::paused_render(){
 }
 
 void solaris::paused_update(){
-    
 
     switch(event.type){
         case sf::Event::MouseButtonPressed:
@@ -327,93 +331,101 @@ void solaris::overworld_update(){
 
 }
 
-// SHIP Screen----------------------------------------------------------------//
-void solaris::ship_logic(){
-    // collison for walls
-    if (this->ship.getGlobalBounds().top < 0 || this->ship.getGlobalBounds().top+this->ship.getGlobalBounds().height > SPACE_HEIGHT){
-        this->shipVel.y *= -2; 
+// outerspace Screen----------------------------------------------------------------//
+void solaris::outerspace_logic(){
+    // collison fpr walls
+    if (this->astro.getGlobalBounds().top < 0 || this->astro.getGlobalBounds().top+this->astro.getGlobalBounds().height > SPACE_HEIGHT){
+        this->astroVel.y *= -2; 
     } 
-    else if (this->ship.getGlobalBounds().left < 0 || this->ship.getGlobalBounds().left+this->ship.getGlobalBounds().width > SPACE_WIDTH){
-        this->shipVel.x *= -2;
+    else if (this->astro.getGlobalBounds().left < 0 || this->astro.getGlobalBounds().left+this->astro.getGlobalBounds().width > SPACE_WIDTH){
+        this->astroVel.x *= -2;
     } else {
         // movement for ship
         if (Keyboard::isKeyPressed(Keyboard::Key::W)){
-            shipApplyForce(Vector2f(0, -shipSpeed));
+            astroApplyForce(Vector2f(0, -astroSpeed));
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::A)) {
-            shipApplyForce(Vector2f(-shipSpeed, 0));
+            astroApplyForce(Vector2f(-astroSpeed, 0));
         } 
         if (Keyboard::isKeyPressed(Keyboard::Key::D)) {
-            shipApplyForce(Vector2f(shipSpeed, 0));
+            astroApplyForce(Vector2f(astroSpeed, 0));
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::S)) {
-            shipApplyForce(Vector2f(0, shipSpeed));
+            astroApplyForce(Vector2f(0, astroSpeed));
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Q)) {
-            shipRotateForce(-0.5);
+            astroRotateForce(-0.5);
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::E)) {
-            shipRotateForce(0.5);
+            astroRotateForce(0.5);
         }
      }
     
 }
 
-void solaris::ship_render(){
+void solaris::outerspace_render(){
     // set the camera
     set_camera();
     this->window->setView(camera);
 
     // drawing scene
     this->window->clear();
-    this->window->draw(this->background);
-    this->window->draw(this->ship);
+    this->window->draw(this->spaceBackground);
+    this->window->draw(this->astro);
     this->window->display();
 }
 
-void solaris::ship_update(){
+void solaris::outerspace_update(){
     
     // getting direction
-    dir.y = -std::cos(( this->ship.getRotation() * 3.14) / 180);
-    dir.x = std::sin(( this->ship.getRotation() * 3.14) / 180);
+    dir.y = -std::cos(( this->astro.getRotation() * 3.14) / 180);
+    dir.x = std::sin(( this->astro.getRotation() * 3.14) / 180);
 
 
-    // applying the forces
-    if (abs(shipVel.x) < 2 && abs(shipVel.y) < 2){
-        this->shipVel += this->shipAcc;
+    // applyastrothe forces
+    if (abs(astroVel.x) < 2 && abs(astroVel.y) < 2){
+        this->astroVel += this->astroAcc;
     }
-    this->shipRotVel += this->shipRotAcc;
+    this->astroRotVel += this->astroRotAcc;
     
-    // Sprite Change depending on direction of movement
-    if (this->shipVel.x > 0){
-        this->shipTex.loadFromFile("media/astronaut-right.png");
-        this->ship.setTexture(shipTex);
+    // Sprite astroge depending on direction of movement
+    if (this->astroVel.x > 0){
+        this->astroTex.loadFromFile("media/astronaut-right.png");
+        this->astro.setTexture(astroTex);
     } else {
-        this->shipTex.loadFromFile("media/astronaut-left.png");
-        this->ship.setTexture(shipTex);
+        this->astroTex.loadFromFile("media/astronaut-left.png");
+        this->astro.setTexture(astroTex);
     }
-    if (this->shipVel == Vector2f(0, 0)){
-        this->shipTex.loadFromFile("media/astronaut-Solaris.png");
-        this->ship.setTexture(shipTex);
+    if (this->astroVel == Vector2f(0, 0)){
+        this->astroTex.loadFromFile("media/astronaut-Solaris.png");
+        this->astro.setTexture(astroTex);
     }
 
-    // move/rotate ship
-    this->ship.rotate(this->shipRotVel);
-    this->ship.move(this->shipVel);
+    // moves/trotate ship
+    this->astro.rotate(this->astroRotVel);
+    this->astro.move(this->astroVel);
 
-    // dispating forces
-    this->shipVel.x *= 0.99;
-    this->shipVel.y *= 0.99;
-    this->shipRotVel *= 0.8;
-    if (abs(this->shipVel.x) < 0.1) this->shipVel.x = 0;
-    if (abs(this->shipVel.y) < 0.1) this->shipVel.y = 0;
+    // disastrong forces
+    this->astroVel.x *= 0.99;
+    this->astroVel.y *= 0.99;
+    this->astroRotVel *= 0.8;
+    if (abs(this->astroVel.x) < 0.1) this->astroVel.x = 0;
+    if (abs(this->astroVel.y) < 0.1) this->astroVel.y = 0;
 
+    // Resastrocceleration so program doesn't bReAk
+    this->astroRotAcc = 0;
+    this->astroAcc.x = 0;
+    this->astroAcc.y = 0;
+}
 
-    // Reset Acceleration so program doesn't bReAk
-    this->shipRotAcc = 0;
-    this->shipAcc.x = 0;
-    this->shipAcc.y = 0;
+// Ship screens
+void solaris::ship_logic(){
 
+}
+void solaris::ship_render(){
+    
+}
+void solaris::ship_update(){
     
 }
 
@@ -425,6 +437,9 @@ void solaris::update(){
     switch (gameState) {
         case TITLESCREEN:
             titlescreen_update();
+            break;
+        case OUTERSPACE:
+            outerspace_update();
             break;
         case SHIP:
             ship_update();
@@ -440,6 +455,9 @@ void solaris::logic(){
         case TITLESCREEN:
             titlescreen_logic();
             break;
+        case OUTERSPACE:
+            outerspace_logic();
+            break;
         case SHIP:
             ship_logic();
             break;
@@ -454,7 +472,10 @@ void solaris::render(){
         case TITLESCREEN:
             titlescreen_render();
             break;
-        case SHIP:
+        case OUTERSPACE:
+            outerspace_render();
+            break;
+        case SHIP: // here
             ship_render();
             break;
         case PAUSED:
@@ -462,6 +483,4 @@ void solaris::render(){
             break;
 
     }
-
-
 }

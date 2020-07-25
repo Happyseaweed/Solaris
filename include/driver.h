@@ -63,25 +63,25 @@ class solaris {
 		bool pressed;
 		
 
-		// Ship
+		// Outerspace
 		Texture backgroundTex;
-		Sprite background;
-		Sprite ship; // Technically the player sprite
-		Texture shipTex;
-		Vector2f shipVel;
+		Sprite spaceBackground;
+		Sprite astro; // Technically the player sprite
+		Texture astroTex;
+		Vector2f astroVel;
 
-		Vector2f shipAcc;
-		float shipRotVel;
-		float shipRotAcc;
+		Vector2f astroAcc;
+		float astroRotVel;
+		float astroRotAcc;
 		Vector2f dir;
-		void shipApplyForce(Vector2f force);
-		void shipRotateForce(float d);
+		void astroApplyForce(Vector2f force);
+		void astroRotateForce(float d);
 		
 		void set_camera();
 		View camera;
 		float SPACE_WIDTH;
 		float SPACE_HEIGHT;
-		float shipSpeed;
+		float astroSpeed;
 
 
 		// Paused variable
@@ -116,6 +116,11 @@ class solaris {
 		void ship_logic();
 		void ship_render();
 		void ship_update();
+
+		// space
+		void outerspace_logic();
+		void outerspace_render();
+		void outerspace_update();
 
 		// Public Functions
 		void logic();

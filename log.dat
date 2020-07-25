@@ -21,10 +21,12 @@ UI:
 Changes log (newest at the top please!):
 
 July.24.2020 - Siwei & Ahmedo
-1. 
-2. 
-3. 
-4. 
+1. Border collision for character and background border
+2. None
+3. Ship Logic function updated
+   OUTERSPACE state added, seperates the space and ship environemnts, added OUTER_SPACE functions;
+4. "Bouncy border some how accelerates your player velocity"
+    Player sprite messed up when facing left and right, helmet buldging and there is no feet
 
 July.24.2020 - Ahmed
 1. None

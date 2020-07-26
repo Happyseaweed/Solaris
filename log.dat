@@ -8,7 +8,7 @@ Format:
 []--------------------                    --------------------[]
 
 Bugs & Errors List:
-
+1. Player sprite is glitched
 
 UX:
 
@@ -19,6 +19,17 @@ UI:
 []--------------------                    --------------------[]
 
 Changes log (newest at the top please!):
+
+July.26.2020 - Siwei
+1. N/A
+2. Added a collision block for testing purposes
+3. Added collision-block sprite, added functions to allow transfer of velocity & momentum
+   NOTE: When player is touching block, it seems like there is infinite friction between them, and sliding up along the block causes  it to move up
+   need to add rotation values to block using some math 
+   need to add block velocity WITH RESPECT TO BACKGROUND, NOT CURRENT WINDOW!!!!!!!
+   COLLISION WORKS, GOING TO BE WORKING ON SPACE STATION SOON.
+4. Sprite is VERY GLITCHEDEDEEDSEDSFDSGDS
+
 
 July.24.2020 - Siwei & Ahmedo
 1. Border collision for character and background border

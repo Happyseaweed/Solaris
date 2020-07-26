@@ -12,6 +12,7 @@
 #include <fstream>
 #include <stdio.h>
 #include <map>
+#include <math.h>
 
 #define ll long long
 
@@ -160,6 +161,14 @@ void solaris::initVariables(){
     this->astroVel = Vector2f(0, 0);
     this->astroAcc = Vector2f(0, 0);
 
+    // Collision block test;
+    this->bloc.loadFromFile("media/collision-block.png");
+    this->block.setTexture(bloc);
+    this->block.setOrigin(Vector2f(this->astroTex.getSize().x/2, this->astroTex.getSize().y/2));
+    this->block.setScale(Vector2f(10.0f, 10.0f));
+    this->block.setPosition(500, 500);
+    this->blockVel = Vector2f(0, 0);
+    this->blockAcc = Vector2f(0, 0);
 }
 
 void solaris::astroApplyForce(Vector2f force) {
@@ -359,7 +368,20 @@ void solaris::outerspace_logic(){
         if (Keyboard::isKeyPressed(Keyboard::Key::E)) {
             astroRotateForce(0.5);
         }
-     }
+    }
+    if (this->astro.getGlobalBounds().intersects(this->block.getGlobalBounds())){
+        // get angle of collision with respect to block (as origin);
+        /*
+        Vector2f playerCenter = Vector2f(this->astro.getPosition().x/2, this->astro.getPosition().y/2);
+        Vector2f blockCenter = Vector2f(this->block.getPosition().x/2, this->block.getPosition().y/2);
+        float xdif = playerCenter.x - blockCenter.x;
+        float ydif = playerCenter.y - blockCenter.y;
+        float theta = (atan(ydif/xdif)*3.14159)/180; // angle relative to block
+        */
+        // Get y velocity
+        blockVel = astroVel;
+        // get x velocity
+    }
     
 }
 
@@ -372,6 +394,7 @@ void solaris::outerspace_render(){
     this->window->clear();
     this->window->draw(this->spaceBackground);
     this->window->draw(this->astro);
+    this->window->draw(this->block);
     this->window->display();
 }
 
@@ -404,10 +427,13 @@ void solaris::outerspace_update(){
     // moves/trotate ship
     this->astro.rotate(this->astroRotVel);
     this->astro.move(this->astroVel);
+    this->block.move(this->blockVel);
 
-    // disastrong forces
+    // disapating forces
     this->astroVel.x *= 0.99;
     this->astroVel.y *= 0.99;
+    this->blockVel.x *= 0.99;
+    this->blockVel.y *= 0.99;
     this->astroRotVel *= 0.8;
     if (abs(this->astroVel.x) < 0.1) this->astroVel.x = 0;
     if (abs(this->astroVel.y) < 0.1) this->astroVel.y = 0;

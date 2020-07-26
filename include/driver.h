@@ -70,6 +70,12 @@ class solaris {
 		Texture astroTex;
 		Vector2f astroVel;
 
+		// COLLISION BLOCK TEST
+		Sprite block;
+		Texture bloc;
+		Vector2f blockVel;
+		Vector2f blockAcc;
+
 		Vector2f astroAcc;
 		float astroRotVel;
 		float astroRotAcc;
@@ -82,6 +88,7 @@ class solaris {
 		float SPACE_WIDTH;
 		float SPACE_HEIGHT;
 		float astroSpeed;
+
 
 
 		// Paused variable

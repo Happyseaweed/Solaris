@@ -34,6 +34,128 @@ using namespace sf;
 
 // if you see this, ahmed is gay & has small pp
 
+
+
+// Raycasting for player
+class Ray {
+private:
+	// Position of ray
+	Vector2f pos;
+	// direction of ray
+	Vector2f dir;
+
+public:
+	// points for line
+	Vertex line[2];
+
+	void lookAt(Vector2f p){
+		// the direction is point - position
+		dir.x = p.x - pos.x;
+		dir.y = p.y - pos.y;
+
+		// normalize the vector
+		dir = normalize(dir);
+
+		// change the line
+		line[0] = pos;
+		Vector2f newPos = Vector2f(pos.x+dir.x*10, pos.y+dir.y*10);
+		line[1] = newPos;
+	}
+
+	// set the position
+	void setPos(Vector2f newPos) {
+		pos = newPos;
+	}
+
+	// normalize the vector
+	Vector2f normalize(const Vector2f vec){
+		// get the magnitude of vector
+		float mag = (float) sqrt( (vec.x*vec.x) + (vec.y*vec.y) );
+
+		// divide by magnitude if not 0
+		if (mag != 0){
+			return Vector2f(vec.x/mag, vec.y/mag);
+		}
+		return vec;
+	}
+
+	Vector2f cast(FloatRect a){
+		float x1, y1, x2, y2;
+		float distance = 999999999999;
+		Vector2f pt;
+		for (int i = 0; i < 4; i++){
+			// Left side
+			if (i == 0){
+				x1 = a.left;
+				y1 = a.top;
+
+				x2 = a.left;
+				y2 = a.top+a.height;
+
+
+
+			// Top side
+			} else if (i == 1) {
+				x1 = a.left;
+				y1 = a.top;
+				x2 = a.left+a.width;
+				y2 = a.top;
+
+			// Right side
+			} else if (i == 2) {
+				x1 = a.left+a.width;
+				y1 = a.top;
+				x2 = a.left+a.width;
+				y2 = a.top+a.height;
+
+			// Bottom side
+			} else if (i == 3) {
+				x1 = a.left+a.width;
+				y1 = a.top+a.height;
+				x2 = a.left;
+				y2 = a.top+a.height;
+			}
+
+			// Ray 
+			float x3 = pos.x;
+			float y3 = pos.y;
+			float x4 = pos.x + dir.x;
+			float y4 = pos.y + dir.y;
+
+
+			// deninmator
+			float den = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+			if (den == 0){
+				continue;
+			}
+
+			float t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / den;
+			float u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / den;
+
+			// if it intersects
+			if (t > 0 && t < 1) {
+				Vector2f tempPt = Vector2f (x1+t*(x2 - x1), y1+t*(y2-y1));
+				
+				if (sqrt( pow(pos.x - tempPt.x, 2) + pow(pos.y - tempPt.y, 2) ) < distance){
+					distance = sqrt( pow(pos.x - tempPt.x, 2) + pow(pos.y - tempPt.y, 2) );
+					pt = tempPt;
+				}
+			} else {
+				continue;
+			}
+		}
+		if (distance == 999999999999){
+			return pos;
+		}
+		return pt;
+
+
+
+
+	}
+};
+
+
 // Solaris class
 class solaris {
 	private:
@@ -69,6 +191,9 @@ class solaris {
 		Sprite astro; // Technically the player sprite
 		Texture astroTex;
 		Vector2f astroVel;
+
+		// Ray testing
+		Ray ray1;
 
 		// COLLISION BLOCK TEST
 		Sprite block;
@@ -135,5 +260,7 @@ class solaris {
 		void update();
 		void pollEvents();
 };
+
+
 
 void change_state();

@@ -169,6 +169,9 @@ void solaris::initVariables(){
     this->block.setPosition(500, 500);
     this->blockVel = Vector2f(0, 0);
     this->blockAcc = Vector2f(0, 0);
+
+    // RAY CaSting
+    ray1.setPos(astro.getPosition());
 }
 
 void solaris::astroApplyForce(Vector2f force) {
@@ -199,6 +202,7 @@ void solaris::set_camera() {
     camera.setCenter(astro.getPosition().x,
                      astro.getPosition().y);
     
+    
     // Checking for camera going out of bounds
     if (camera.getCenter().x - camera.getSize().x/2 < 0){
         camera.setCenter(0+camera.getSize().x/2, camera.getCenter().y);
@@ -215,6 +219,7 @@ void solaris::set_camera() {
     if (camera.getCenter().y + camera.getSize().y/2 > SPACE_HEIGHT){
         camera.setCenter(camera.getCenter().x, SPACE_HEIGHT - camera.getSize().y/2);
     }
+    
 }
 
 
@@ -390,11 +395,20 @@ void solaris::outerspace_render(){
     set_camera();
     this->window->setView(camera);
 
+    CircleShape pt;
+    pt.setRadius(10);
+    pt.setOrigin(pt.getRadius(), pt.getRadius() );
+    pt.setPosition(ray1.cast(block.getGlobalBounds()));
+  
+
+
     // drawing scene
     this->window->clear();
     this->window->draw(this->spaceBackground);
     this->window->draw(this->astro);
     this->window->draw(this->block);
+    this->window->draw(pt);
+    this->window->draw(this->ray1.line, 2, Lines);
     this->window->display();
 }
 
@@ -428,6 +442,7 @@ void solaris::outerspace_update(){
     this->astro.rotate(this->astroRotVel);
     this->astro.move(this->astroVel);
     this->block.move(this->blockVel);
+    //this->block.rotate(0.02);
 
     // disapating forces
     this->astroVel.x *= 0.99;
@@ -442,6 +457,10 @@ void solaris::outerspace_update(){
     this->astroRotAcc = 0;
     this->astroAcc.x = 0;
     this->astroAcc.y = 0;
+
+    // RAY TESTING
+    ray1.setPos(astro.getPosition());
+    ray1.lookAt(Vector2f(this->window->mapPixelToCoords(Mouse::getPosition(*this->window)) ));
 }
 
 // Ship screens

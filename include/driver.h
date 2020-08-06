@@ -148,10 +148,6 @@ public:
 			return pos;
 		}
 		return pt;
-
-
-
-
 	}
 };
 
@@ -190,10 +186,13 @@ class solaris {
 		Sprite spaceBackground;
 		Sprite astro; // Technically the player sprite
 		Texture astroTex;
+		Texture astroLeftTex;
+		Texture astroRightTex;
 		Vector2f astroVel;
 
 		// Ray testing
 		Ray ray1;
+		CircleShape pt;
 
 		// COLLISION BLOCK TEST
 		Sprite block;
@@ -207,6 +206,7 @@ class solaris {
 		Vector2f dir;
 		void astroApplyForce(Vector2f force);
 		void astroRotateForce(float d);
+		void teleport(Vector2f position);
 		
 		void set_camera();
 		View camera;

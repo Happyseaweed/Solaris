@@ -20,6 +20,13 @@ UI:
 
 Changes log (newest at the top please!):
 
+August.06.2020 - Siweido
+
+1. Fixing Sprite
+2. Fixing sprite
+3. added teleportation function, idk what to do, maybe change to grapling hook SOON
+4. sprite is just not wanting to work, collision with block often result getting stuck inside of it.
+
 July.26.2020 - Siwei
 1. N/A
 2. Added a collision block for testing purposes

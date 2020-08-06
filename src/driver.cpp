@@ -154,6 +154,8 @@ void solaris::initVariables(){
 
     // Loading texture
     this->astroTex.loadFromFile("media/astronaut-Solaris.png");
+    this->astroRightTex.loadFromFile("media/astronaut-right.png");
+    this->astroLeftTex.loadFromFile("media/astronaut-left.png");
     this->astro.setTexture(astroTex);
     this->astro.setOrigin(Vector2f(this->astroTex.getSize().x/2, this->astroTex.getSize().y/2 ));
     this->astro.setScale(Vector2f(5.0f, 5.0f));
@@ -164,7 +166,7 @@ void solaris::initVariables(){
     // Collision block test;
     this->bloc.loadFromFile("media/collision-block.png");
     this->block.setTexture(bloc);
-    this->block.setOrigin(Vector2f(this->astroTex.getSize().x/2, this->astroTex.getSize().y/2));
+    this->block.setOrigin(Vector2f(this->bloc.getSize().x/2, this->bloc.getSize().y/2));
     this->block.setScale(Vector2f(10.0f, 10.0f));
     this->block.setPosition(500, 500);
     this->blockVel = Vector2f(0, 0);
@@ -181,6 +183,13 @@ void solaris::astroApplyForce(Vector2f force) {
 void solaris::astroRotateForce(float d) {
     this->astroRotAcc += d;
 }
+
+void solaris::teleport(Vector2f position){
+    float x = position.x;
+    float y = position.y;
+    this->astro.setPosition(x, y);
+}
+
 void solaris::initWindow(){
     // Window
 	this->videoMode.height = SCREEN_HEIGHT;
@@ -373,6 +382,9 @@ void solaris::outerspace_logic(){
         if (Keyboard::isKeyPressed(Keyboard::Key::E)) {
             astroRotateForce(0.5);
         }
+        if (Keyboard::isKeyPressed(Keyboard::Key::Space)){
+            teleport(Vector2f(this->pt.getPosition().x, this->pt.getPosition().y));
+        }
     }
     if (this->astro.getGlobalBounds().intersects(this->block.getGlobalBounds())){
         // get angle of collision with respect to block (as origin);
@@ -395,20 +407,19 @@ void solaris::outerspace_render(){
     set_camera();
     this->window->setView(camera);
 
-    CircleShape pt;
-    pt.setRadius(10);
-    pt.setOrigin(pt.getRadius(), pt.getRadius() );
-    pt.setPosition(ray1.cast(block.getGlobalBounds()));
+    
+    this->pt.setRadius(10);
+    this->pt.setOrigin(pt.getRadius(), pt.getRadius() );
+    this->pt.setPosition(ray1.cast(block.getGlobalBounds()));
   
-
 
     // drawing scene
     this->window->clear();
     this->window->draw(this->spaceBackground);
-    this->window->draw(this->astro);
     this->window->draw(this->block);
+    this->window->draw(this->astro);
     this->window->draw(pt);
-    this->window->draw(this->ray1.line, 2, Lines);
+    this->window->draw(this->ray1.line, 20, Lines);
     this->window->display();
 }
 
@@ -419,22 +430,20 @@ void solaris::outerspace_update(){
     dir.x = std::sin(( this->astro.getRotation() * 3.14) / 180);
 
 
-    // applyastrothe forces
+    // apply astro forces
     if (abs(astroVel.x) < 2 && abs(astroVel.y) < 2){
         this->astroVel += this->astroAcc;
     }
     this->astroRotVel += this->astroRotAcc;
     
     // Sprite astroge depending on direction of movement
+    // Decided to store sprites seperately, instead of loading them everytime, to prevent glitches
     if (this->astroVel.x > 0){
-        this->astroTex.loadFromFile("media/astronaut-right.png");
-        this->astro.setTexture(astroTex);
+        this->astro.setTexture(astroRightTex);
     } else {
-        this->astroTex.loadFromFile("media/astronaut-left.png");
-        this->astro.setTexture(astroTex);
+        this->astro.setTexture(astroLeftTex);
     }
     if (this->astroVel == Vector2f(0, 0)){
-        this->astroTex.loadFromFile("media/astronaut-Solaris.png");
         this->astro.setTexture(astroTex);
     }
 

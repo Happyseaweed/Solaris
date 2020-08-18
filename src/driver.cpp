@@ -140,22 +140,24 @@ void solaris::initVariables(){
     this->quitText.setPosition((SCREEN_WIDTH - bounds.width)/2, this->quitButton.getPosition().y+50);
 
 // Ship
-    this->backgroundTex.loadFromFile("media/bgimg.jpg");
+    this->backgroundTex.loadFromFile("media/astronaut/bgimg.png");
     this->spaceBackground.setTexture(backgroundTex);
+    this->spaceBackground.setScale(Vector2f(5, 5));
     this->spaceBackground.setPosition(Vector2f(0, 0));
     this->astroSpeed = 0.5;
 
     
     // Moving Camera Section
-    SPACE_WIDTH = backgroundTex.getSize().x;
-    SPACE_HEIGHT = backgroundTex.getSize().y;
+    SPACE_WIDTH = spaceBackground.getTextureRect().width * 5;
+    SPACE_HEIGHT = spaceBackground.getTextureRect().height * 5;
+    cout << SPACE_WIDTH << endl;
     this->camera.setCenter(Vector2f(SPACE_WIDTH/2, SPACE_HEIGHT/2));
     this->camera.setSize(Vector2f(SCREEN_WIDTH/2.5, SCREEN_HEIGHT/2.5));
 
     // Loading texture
-    this->astroTex.loadFromFile("media/astronaut-Solaris.png");
-    this->astroRightTex.loadFromFile("media/astronaut-right.png");
-    this->astroLeftTex.loadFromFile("media/astronaut-left.png");
+    this->astroTex.loadFromFile("media/astronaut/astro-center.png");
+    this->astroRightTex.loadFromFile("media/astronaut/astro-right.png");
+    this->astroLeftTex.loadFromFile("media/astronaut/astro-left.png");
     this->astro.setTexture(astroTex);
     this->astro.setOrigin(Vector2f(this->astroTex.getSize().x/2, this->astroTex.getSize().y/2 ));
     this->astro.setScale(Vector2f(5.0f, 5.0f));

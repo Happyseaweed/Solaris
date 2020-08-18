@@ -199,6 +199,9 @@ class solaris {
 		Texture bloc;
 		Vector2f blockVel;
 		Vector2f blockAcc;
+		float blocRotVel;
+		float blocRotAcc;
+		
 
 		Vector2f astroAcc;
 		float astroRotVel;

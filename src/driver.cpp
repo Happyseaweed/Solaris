@@ -390,16 +390,49 @@ void solaris::outerspace_logic(){
     }
     if (this->astro.getGlobalBounds().intersects(this->block.getGlobalBounds())){
         // get angle of collision with respect to block (as origin);
-        /*
+        
         Vector2f playerCenter = Vector2f(this->astro.getPosition().x/2, this->astro.getPosition().y/2);
         Vector2f blockCenter = Vector2f(this->block.getPosition().x/2, this->block.getPosition().y/2);
         float xdif = playerCenter.x - blockCenter.x;
         float ydif = playerCenter.y - blockCenter.y;
+
         float theta = (atan(ydif/xdif)*3.14159)/180; // angle relative to block
+        float diff = sqrt(xdif*xdif + ydif*ydif);
+
+        float X = blockVel.x;
+        float Y = blockVel.y;
+
+        float alpha = (atan(X/Y)*3.14159)/180;
+
+        if (alpha - (3.14159 - theta) > 0) {
+            blocRotAcc += 1;
+        }
+        else if (alpha - (3.14159 - theta) < 0) {
+            blocRotAcc -= -1;
+        }
+
+        // Get velocity
+        blockVel.x = astroVel.x*2;
+        blockVel.y = astroVel.y*2;
+        astroVel.x *= -1;
+        astroVel.y *= -1; 
+        
+
+        //this crap obviously does not work, but I am working on a set of algorithms that will make it work
+        /*   Brief Idea:
+            To calculate the spin an object is gonna give the collision block, we look at:
+            1. the point of collision, 
+            2. The angle of the collision relative to the collision block, 
+            3. the velocity vector of the collider
+
+            Pseudo: 
+            1. Find theta (angle of collision relative to CB) and draw line between collision point and center
+            2. now find angle between collider velocity vector and that line we drew,
+            3. Make sure the angle is the principal angle (the one from the previous step)
+            4. if angle > 180, turn counter clockwise, and if angle < 180, spin clockwise.
+            5. else, does not effect spin.
+
         */
-        // Get y velocity
-        blockVel = astroVel;
-        // get x velocity
     }
     
 }
@@ -437,7 +470,7 @@ void solaris::outerspace_update(){
         this->astroVel += this->astroAcc;
     }
     this->astroRotVel += this->astroRotAcc;
-    
+    this->blocRotVel += this->blocRotAcc;
     // Sprite astroge depending on direction of movement
     // Decided to store sprites seperately, instead of loading them everytime, to prevent glitches
     if (this->astroVel.x > 0){
@@ -453,6 +486,7 @@ void solaris::outerspace_update(){
     this->astro.rotate(this->astroRotVel);
     this->astro.move(this->astroVel);
     this->block.move(this->blockVel);
+    this->block.rotate(this->blocRotVel);
     //this->block.rotate(0.02);
 
     // disapating forces
@@ -460,12 +494,14 @@ void solaris::outerspace_update(){
     this->astroVel.y *= 0.99;
     this->blockVel.x *= 0.99;
     this->blockVel.y *= 0.99;
+    this->blocRotVel *= 0.8;
     this->astroRotVel *= 0.8;
     if (abs(this->astroVel.x) < 0.1) this->astroVel.x = 0;
     if (abs(this->astroVel.y) < 0.1) this->astroVel.y = 0;
 
     // Resastrocceleration so program doesn't bReAk
     this->astroRotAcc = 0;
+    this->blocRotAcc *= 0.2;
     this->astroAcc.x = 0;
     this->astroAcc.y = 0;
 

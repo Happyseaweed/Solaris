@@ -140,9 +140,15 @@ void solaris::initVariables(){
     this->quitText.setPosition((SCREEN_WIDTH - bounds.width)/2, this->quitButton.getPosition().y+50);
 
 // Ship
+    this->habTexture.loadFromFile("media/hab.png");
+    this->habitat.setTexture(habTexture);
+    this->habitat.setScale(Vector2f(5.0f, 5.0f));
+    this->habitat.setPosition(Vector2f(600, 300));
+
+
     this->backgroundTex.loadFromFile("media/astronaut/bgimg.png");
     this->spaceBackground.setTexture(backgroundTex);
-    this->spaceBackground.setScale(Vector2f(4, 4));
+    this->spaceBackground.setScale(Vector2f(6, 6));
     this->spaceBackground.setPosition(Vector2f(0, 0));
     this->astroSpeed = 0.5;
 
@@ -397,6 +403,14 @@ void solaris::outerspace_logic(){
         }
     }
 
+    if (this->block.getGlobalBounds().top < 0 || this->block.getGlobalBounds().top+this->block.getGlobalBounds().height > SPACE_HEIGHT){
+        this->blockVel.y *= -2; 
+    } 
+    else if (this->block.getGlobalBounds().left < 0 || this->block.getGlobalBounds().left+this->block.getGlobalBounds().width > SPACE_WIDTH){
+        this->blockVel.x *= -2;
+    }
+
+
     if (this->astro.getGlobalBounds().intersects(this->block.getGlobalBounds())){
         // get angle of collision with respect to block (as origin);
         
@@ -478,6 +492,7 @@ void solaris::outerspace_render(){
     this->window->draw(this->spaceBackground);
     this->window->draw(this->block);
     this->window->draw(this->astro);
+    this->window->draw(this->habitat);
     this->window->draw(pt);
     this->window->draw(this->ray1.line, 20, Lines);
     this->window->display();
@@ -517,16 +532,20 @@ void solaris::outerspace_update(){
     // disapating forces
     this->astroVel.x *= 0.99;
     this->astroVel.y *= 0.99;
-    this->blockVel.x *= 0.99;
-    this->blockVel.y *= 0.99;
+    this->blockVel.x *= 0.5;
+    this->blockVel.y *= 0.5;
     this->blocRotVel *= 0.8;
     this->astroRotVel *= 0.8;
     if (abs(this->astroVel.x) < 0.1) this->astroVel.x = 0;
     if (abs(this->astroVel.y) < 0.1) this->astroVel.y = 0;
+    if (abs(this->blockVel.x) < 0.2) this->blockVel.x = 0;
+    if (abs(this->blockVel.y) < 0.2) this->blockVel.y = 0;
+    if (abs(this->astroRotVel) < 0.2) this->astroRotVel = 0;
+    if (abs(this->blocRotVel) < 0.2) this->blocRotVel = 0;
 
     // Resastrocceleration so program doesn't bReAk
     this->astroRotAcc = 0;
-    this->blocRotAcc *= 0.5;
+    this->blocRotAcc  = 0;
     this->astroAcc.x = 0;
     this->astroAcc.y = 0;
 

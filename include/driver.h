@@ -202,6 +202,10 @@ class solaris {
 		Vector2f blockAcc;
 		float blocRotVel;
 		float blocRotAcc;
+
+		// Habitat
+		Sprite habitat;
+		Texture habTexture;
 		
 
 		Vector2f astroAcc;

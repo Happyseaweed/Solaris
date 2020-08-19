@@ -394,6 +394,7 @@ void solaris::outerspace_logic(){
             teleport(Vector2f(this->pt.getPosition().x, this->pt.getPosition().y));
         }
     }
+
     if (this->astro.getGlobalBounds().intersects(this->block.getGlobalBounds())){
         // get angle of collision with respect to block (as origin);
         
@@ -401,21 +402,34 @@ void solaris::outerspace_logic(){
         Vector2f blockCenter = Vector2f(this->block.getPosition().x/2, this->block.getPosition().y/2);
         float xdif = playerCenter.x - blockCenter.x;
         float ydif = playerCenter.y - blockCenter.y;
-
+        
+        // angles + length
         float theta = (atan(ydif/xdif)*3.14159)/180; // angle relative to block
-        float diff = sqrt(xdif*xdif + ydif*ydif);
+        float diff = sqrt(xdif*xdif + ydif*ydif); // length of collision vector, kinda useless at the moment
 
-        float X = blockVel.x;
-        float Y = blockVel.y;
+        // velocities of player
+        float X = astroVel.x; 
+        float Y = astroVel.y;
 
         float alpha = (atan(X/Y)*3.14159)/180;
+        int colQuad = 0;
 
-        if (alpha - (3.14159 - theta) > 0) {
-            blocRotAcc += 1;
+        if (xdif > 0 && ydif > 0) colQuad = 3;
+        else if (xdif < 0 && ydif < 0) colQuad = 1;
+        else if (xdif < 0 && ydif > 0) colQuad = 4;
+        else if (xdif > 0 && ydif < 0) colQuad = 2;
+
+        float phi = 0;
+
+        if (colQuad == 1 || colQuad == 3){
+            phi = min(alpha+theta, (90-alpha)+(90-theta) );
+        }   
+        else if (colQuad == 2 || colQuad == 4){
+            phi = min(alpha + (90-theta), (90-alpha)+theta );
         }
-        else if (alpha - (3.14159 - theta) < 0) {
-            blocRotAcc -= -1;
-        }
+        
+        // rotation
+        blocRotAcc += sqrt(X*X + Y*Y) * cos(phi);
 
         // Get velocity
         blockVel.x = astroVel.x*2;
@@ -425,19 +439,22 @@ void solaris::outerspace_logic(){
         
 
         //this crap obviously does not work, but I am working on a set of algorithms that will make it work
-        /*   Brief Idea:
-            To calculate the spin an object is gonna give the collision block, we look at:
-            1. the point of collision, 
-            2. The angle of the collision relative to the collision block, 
-            3. the velocity vector of the collider
-
-            Pseudo: 
-            1. Find theta (angle of collision relative to CB) and draw line between collision point and center
-            2. now find angle between collider velocity vector and that line we drew,
-            3. Make sure the angle is the principal angle (the one from the previous step)
-            4. if angle > 180, turn counter clockwise, and if angle < 180, spin clockwise.
-            5. else, does not effect spin.
-
+        /*   Rotating stuff:
+            1. First find Radius, which is distance from collision point to center of object
+            2. Quadrant of collision vector relative to velocity vector's axises
+            2.5 theta = collision angle to x axis, alpha = velocity angle to x axis [0, 90]
+            3. col: 1, relative = 3
+                col: 2, relative = 4
+                col: 3, relative = 1
+                col: 4, relative 2
+            4. if (rel == 3 or 1, velocity in 2, 4){ let phi = angle that velocity vec forms with collision vec
+                angle that velocity vec forms with collision vec is min(alpha+theta, (90-alpha)+(90-theta) );
+            }
+            5. if (rel == 2 or 4, velocity in 1, 3){
+                angle that velocity vec forms with collision vec is min(alpha + (90-theta), (90-alpha)+theta );
+            }
+            6. torque: velocity*cosine(phi);
+            7. update rotation velocity by vel+=torque;
         */
     }
     

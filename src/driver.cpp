@@ -391,7 +391,9 @@ void solaris::outerspace_logic(){
             astroRotateForce(0.5);
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Space)){
-            teleport(Vector2f(this->pt.getPosition().x, this->pt.getPosition().y));
+            //teleport(Vector2f(this->pt.getPosition().x, this->pt.getPosition().y));
+            astroVel.x += 1;
+            astroVel.y += 1;
         }
     }
 
@@ -435,7 +437,7 @@ void solaris::outerspace_logic(){
         blockVel.x = astroVel.x*2;
         blockVel.y = astroVel.y*2;
         astroVel.x *= -1;
-        astroVel.y *= -1; 
+        astroVel.y *= -1;
         
 
         //this crap obviously does not work, but I am working on a set of algorithms that will make it work
@@ -524,7 +526,7 @@ void solaris::outerspace_update(){
 
     // Resastrocceleration so program doesn't bReAk
     this->astroRotAcc = 0;
-    this->blocRotAcc *= 0.2;
+    this->blocRotAcc *= 0.5;
     this->astroAcc.x = 0;
     this->astroAcc.y = 0;
 

@@ -189,6 +189,7 @@ class solaris {
 		Texture astroLeftTex;
 		Texture astroRightTex;
 		Vector2f astroVel;
+		Shader shader;
 
 		// Ray testing
 		Ray ray1;

@@ -142,14 +142,14 @@ void solaris::initVariables(){
 // Ship
     this->backgroundTex.loadFromFile("media/astronaut/bgimg.png");
     this->spaceBackground.setTexture(backgroundTex);
-    this->spaceBackground.setScale(Vector2f(5, 5));
+    this->spaceBackground.setScale(Vector2f(4, 4));
     this->spaceBackground.setPosition(Vector2f(0, 0));
     this->astroSpeed = 0.5;
 
     
     // Moving Camera Section
-    SPACE_WIDTH = spaceBackground.getTextureRect().width * 5;
-    SPACE_HEIGHT = spaceBackground.getTextureRect().height * 5;
+    SPACE_WIDTH = spaceBackground.getTextureRect().width * spaceBackground.getScale().x;
+    SPACE_HEIGHT = spaceBackground.getTextureRect().height * spaceBackground.getScale().y;
     cout << SPACE_WIDTH << endl;
     this->camera.setCenter(Vector2f(SPACE_WIDTH/2, SPACE_HEIGHT/2));
     this->camera.setSize(Vector2f(SCREEN_WIDTH/2.5, SCREEN_HEIGHT/2.5));
@@ -173,6 +173,12 @@ void solaris::initVariables(){
     this->block.setPosition(500, 500);
     this->blockVel = Vector2f(0, 0);
     this->blockAcc = Vector2f(0, 0);
+
+    // Shaders
+    // shader.loadFromFile("include/blur.frag", Shader::Fragment);
+    // shader.setParameter("texture", sf::Shader::CurrentTexture);
+    // shader.setParameter("blur_radius", 201);
+    
 
     // RAY CaSting
     ray1.setPos(astro.getPosition());

@@ -28,12 +28,15 @@ private:
     int currState;
     Sprite displaySprite;
 
+    // textures
+    sf::Texture tex1, tex2, tex3, tex4, tex5;
+
     // constructor
     HealthBar();
 
 public:
     void display(RenderWindow*, solaris*);
-    void logic();
+    void logic(int health);
 
 
 };

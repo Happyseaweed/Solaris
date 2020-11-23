@@ -219,6 +219,13 @@ class solaris {
 		Sprite habitat;
 		Texture habTexture;
 		
+		// Sprites
+		Texture oTank;
+		Sprite oxygenTank100;
+		Sprite oxygenTank75;
+		Sprite oxygenTank50;
+		Sprite oxygenTank25;
+		Sprite oxygenTank0;
 
 		Vector2f astroAcc;
 		float astroRotVel;

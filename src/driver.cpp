@@ -172,6 +172,16 @@ void solaris::initVariables(){
     this->blockVel = Vector2f(0, 0);
     this->blockAcc = Vector2f(0, 0);
 
+    // OxygenTank
+    this->oTank.loadFromFile("media/oxygenTank100.png");
+    this->oxygenTank100.setTexture(oTank);
+    this->oxygenTank100.setOrigin(Vector2f(this->oTank.getSize().x/2, this->oTank.getSize().y/2));
+    this->oxygenTank100.setScale(Vector2f(10.0f, 10.0f));
+
+    sf::Vector2f oxygenPos = this->window->mapPixelToCoords(sf::Vector2f(300, 300));
+    this->oxygenTank100.setPosition(oxygenPos);
+    
+
     // Shaders
     // shader.loadFromFile("include/blur.frag", Shader::Fragment);
     // shader.setParameter("texture", sf::Shader::CurrentTexture);
@@ -469,6 +479,7 @@ void solaris::outerspace_render(){
     this->window->draw(this->astro);
     this->window->draw(this->habitat);
     this->window->draw(pt);
+    this->window->draw(this->oxygenTank100);
     this->window->draw(this->ray1.line, 20, Lines);
     this->window->display();
 }

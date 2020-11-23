@@ -30,10 +30,24 @@
 using namespace std;
 using namespace sf;
 
+//Forward delcaration
+class HealthBar;
+
 #pragma once;
 
-// if you see this, ahmed is gay & has small pp
+// Game state shiz
+enum States {
+    TITLESCREEN,
+    PAUSED,
+    OVERWORLD,
+    SHIP,
+    OUTERSPACE,
+    STATE_NULL
+};
 
+// if you see this, ahmed is gay & has small pp
+extern int gameState;
+extern int nextState;
 
 
 // Raycasting for player
@@ -91,8 +105,6 @@ public:
 
 				x2 = a.left;
 				y2 = a.top+a.height;
-
-
 
 			// Top side
 			} else if (i == 1) {
@@ -154,6 +166,7 @@ public:
 
 // Solaris class
 class solaris {
+	friend class HealthBar;
 	private:
 		// Windows & Events
 		RenderWindow* window;
@@ -168,7 +181,6 @@ class solaris {
 		Font font;
 		Clock clock;
 		float dt;
-
 
 		// Titlescreen Variables
 		RectangleShape playButton;

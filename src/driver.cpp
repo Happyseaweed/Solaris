@@ -17,19 +17,11 @@
 #define ll long long
 
 #include "../include/driver.h"
+#include "../include/UI.h"
 
 using namespace std;
 using namespace sf;
 
-// Game state shiz
-enum States {
-    TITLESCREEN,
-    PAUSED,
-    OVERWORLD,
-    SHIP,
-    OUTERSPACE,
-    STATE_NULL
-};
 
 // variables for gamestates
 int gameState = TITLESCREEN;
@@ -402,7 +394,7 @@ void solaris::outerspace_logic(){
             astroVel.y += 1;
         }
     }
-
+    // Block collision with Boundary
     if (this->block.getGlobalBounds().top < 0 || this->block.getGlobalBounds().top+this->block.getGlobalBounds().height > SPACE_HEIGHT){
         this->blockVel.y *= -2; 
     } 
@@ -410,12 +402,14 @@ void solaris::outerspace_logic(){
         this->blockVel.x *= -2;
     }
 
-
+    // Block Collision with Player
     if (this->astro.getGlobalBounds().intersects(this->block.getGlobalBounds())){
         // get angle of collision with respect to block (as origin);
         
+        // Centers of player and block
         Vector2f playerCenter = Vector2f(this->astro.getPosition().x/2, this->astro.getPosition().y/2);
         Vector2f blockCenter = Vector2f(this->block.getPosition().x/2, this->block.getPosition().y/2);
+        // Differences 
         float xdif = playerCenter.x - blockCenter.x;
         float ydif = playerCenter.y - blockCenter.y;
         
@@ -445,33 +439,14 @@ void solaris::outerspace_logic(){
         }
         
         // rotation
-        blocRotAcc += sqrt(X*X + Y*Y) * cos(phi);
+        //blocRotAcc += sqrt(X*X + Y*Y) * cos(phi);
 
         // Get velocity
         blockVel.x = astroVel.x*2;
         blockVel.y = astroVel.y*2;
-        astroVel.x *= -1;
-        astroVel.y *= -1;
-        
+        astroVel.x *= -0.2;
+        astroVel.y *= -0.2;
 
-        //this crap obviously does not work, but I am working on a set of algorithms that will make it work
-        /*   Rotating stuff:
-            1. First find Radius, which is distance from collision point to center of object
-            2. Quadrant of collision vector relative to velocity vector's axises
-            2.5 theta = collision angle to x axis, alpha = velocity angle to x axis [0, 90]
-            3. col: 1, relative = 3
-                col: 2, relative = 4
-                col: 3, relative = 1
-                col: 4, relative 2
-            4. if (rel == 3 or 1, velocity in 2, 4){ let phi = angle that velocity vec forms with collision vec
-                angle that velocity vec forms with collision vec is min(alpha+theta, (90-alpha)+(90-theta) );
-            }
-            5. if (rel == 2 or 4, velocity in 1, 3){
-                angle that velocity vec forms with collision vec is min(alpha + (90-theta), (90-alpha)+theta );
-            }
-            6. torque: velocity*cosine(phi);
-            7. update rotation velocity by vel+=torque;
-        */
     }
     
 }
@@ -544,8 +519,9 @@ void solaris::outerspace_update(){
     if (abs(this->blocRotVel) < 0.2) this->blocRotVel = 0;
 
     // Resastrocceleration so program doesn't bReAk
+
     this->astroRotAcc = 0;
-    this->blocRotAcc  = 0;
+    this->blocRotAcc = 0;
     this->astroAcc.x = 0;
     this->astroAcc.y = 0;
 
@@ -564,7 +540,6 @@ void solaris::ship_render(){
 void solaris::ship_update(){
     
 }
-
 
 //  Main Update Function
 void solaris::update(){

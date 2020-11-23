@@ -1,35 +1,40 @@
-// #pragma once
-// #include <vector>
-// #include <SFML/Graphics.hpp>
+#include <vector>
+#include <SFML/Graphics.hpp>
 
-// using namespace std;
-// using namespace sf;
+using namespace std;
+using namespace sf;
 
+#pragma once
+// Forward delcaration
+extern class solaris;
 
-// // Class for UI
-// class UI {
-// public: 
-//     // function to display elements
-//     virtual void display() = 0;
+// Class for UI
+class UI {
+public: 
+    // function to display elements
+    virtual void display(RenderWindow*, solaris*) = 0;
 
-//     // function to process data
-//     virtual void logic() = 0;
-// };
-
-
-// class StatusUI : public UI {
-// private:
-//     // images of states to display
-//     vector<Texture> displayStates;
-
-//     // current state
-//     int currState;
-//     Sprite displaySprite;
-
-// public:
-//     void display(RenderWindow&);
-//     void logic();
+    // function to process data
+    virtual void logic() = 0;
+};
 
 
-// }
+class HealthBar : public UI {
+private:
+    // images of states to display
+    vector<Texture> displayStates;
+
+    // current state
+    int currState;
+    Sprite displaySprite;
+
+    // constructor
+    HealthBar();
+
+public:
+    void display(RenderWindow*, solaris*);
+    void logic();
+
+
+};
 

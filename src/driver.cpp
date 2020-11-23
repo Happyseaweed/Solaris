@@ -180,13 +180,17 @@ void solaris::initVariables(){
     this->oTank.loadFromFile("media/oxygenTank100.png");
     this->oxygenTank100.setTexture(oTank);
     this->oxygenTank100.setOrigin(Vector2f(this->oTank.getSize().x/2, this->oTank.getSize().y/2));
-    this->oxygenTank100.setScale(Vector2f(5.0f, 5.0f));
-    cout << camera.x << endl;
-    Vector2f oxygenPos = this->window->mapPixelToCoords(Vector2i(100, 100), camera);
-
-    this->oxygenTank100.setPosition(100, 500);
-    cout << "UI Loaded." << endl;
+    this->oxygenTank100.setScale(Vector2f(10.0f, 10.0f));
     
+    this->oxygenTank100.setPosition( 2350, 1345 );
+
+    
+    this->cHealth.loadFromFile("media/CircleHealth.png");
+    this->circleHealth.setTexture(cHealth);
+    this->circleHealth.setOrigin(Vector2f(this->cHealth.getSize().x/2, this->cHealth.getSize().y/2));
+    this->circleHealth.setScale(Vector2f(5.0f, 5.0f));
+    this->circleHealth.setPosition( 2220, 1220);
+    cout << "UI Loaded." << endl;
     // Shaders
     // shader.loadFromFile("include/blur.frag", Shader::Fragment);
     // shader.setParameter("texture", sf::Shader::CurrentTexture);
@@ -219,8 +223,11 @@ void solaris::initWindow(){
 
     // Frames
     this->window->setFramerateLimit(60);
-}
 
+    // Making GUI Views
+    this->guiView = this->window->getDefaultView();
+    this->miniView.setViewport(sf::FloatRect(0.75f, 0.f, 0.25f, 0.25f));
+}
 
 // Accessors
 const bool solaris::running() const {
@@ -484,8 +491,13 @@ void solaris::outerspace_render(){
     this->window->draw(this->astro);
     this->window->draw(this->habitat);
     this->window->draw(pt);
-    this->window->draw(this->oxygenTank100);
     this->window->draw(this->ray1.line, 20, Lines);
+
+
+    // Drawing GUI
+    this->window->setView(guiView);
+    this->window->draw(this->circleHealth);
+    this->window->draw(this->oxygenTank100);
     this->window->display();
 }
 

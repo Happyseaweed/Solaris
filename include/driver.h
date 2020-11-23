@@ -227,6 +227,9 @@ class solaris {
 		Sprite oxygenTank25;
 		Sprite oxygenTank0;
 
+		Texture cHealth;
+		Sprite circleHealth;
+
 		Vector2f astroAcc;
 		float astroRotVel;
 		float astroRotAcc;
@@ -237,6 +240,8 @@ class solaris {
 		
 		void set_camera();
 		View camera;
+		View guiView;
+		View miniView;
 		float SPACE_WIDTH;
 		float SPACE_HEIGHT;
 		float astroSpeed;

@@ -172,7 +172,7 @@ class solaris {
 		RenderWindow* window;
 		Event event;
 		VideoMode videoMode;
-
+		
 		// Private Functions;
 		void initVariables();
 		void initWindow();

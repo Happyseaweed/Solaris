@@ -146,13 +146,15 @@ void solaris::initVariables(){
 
     
     // Moving Camera Section
+    cout << "Loading Camera Section . . ." << endl;
     SPACE_WIDTH = spaceBackground.getTextureRect().width * spaceBackground.getScale().x;
     SPACE_HEIGHT = spaceBackground.getTextureRect().height * spaceBackground.getScale().y;
-    cout << SPACE_WIDTH << endl;
     this->camera.setCenter(Vector2f(SPACE_WIDTH/2, SPACE_HEIGHT/2));
     this->camera.setSize(Vector2f(SCREEN_WIDTH/2.5, SCREEN_HEIGHT/2.5));
+    cout << "Camera Section Loaded." << endl;
 
     // Loading texture
+    cout << "Loading Textures . . ." << endl;
     this->astroTex.loadFromFile("media/astronaut/astro-center.png");
     this->astroRightTex.loadFromFile("media/astronaut/astro-right.png");
     this->astroLeftTex.loadFromFile("media/astronaut/astro-left.png");
@@ -162,6 +164,7 @@ void solaris::initVariables(){
     this->astro.setPosition(250, 250);
     this->astroVel = Vector2f(0, 0);
     this->astroAcc = Vector2f(0, 0);
+    cout << "Texture Loaded." << endl;
 
     // Collision block test;
     this->bloc.loadFromFile("media/collision-block.png");
@@ -173,15 +176,17 @@ void solaris::initVariables(){
     this->blockAcc = Vector2f(0, 0);
 
     // OxygenTank
+    cout << "Loading UI . . ." << endl;
     this->oTank.loadFromFile("media/oxygenTank100.png");
     this->oxygenTank100.setTexture(oTank);
     this->oxygenTank100.setOrigin(Vector2f(this->oTank.getSize().x/2, this->oTank.getSize().y/2));
-    this->oxygenTank100.setScale(Vector2f(10.0f, 10.0f));
+    this->oxygenTank100.setScale(Vector2f(5.0f, 5.0f));
+    cout << camera.x << endl;
+    Vector2f oxygenPos = this->window->mapPixelToCoords(Vector2i(100, 100), camera);
 
-    sf::Vector2f oxygenPos = this->window->mapPixelToCoords(sf::Vector2f(300, 300));
-    this->oxygenTank100.setPosition(oxygenPos);
+    this->oxygenTank100.setPosition(100, 500);
+    cout << "UI Loaded." << endl;
     
-
     // Shaders
     // shader.loadFromFile("include/blur.frag", Shader::Fragment);
     // shader.setParameter("texture", sf::Shader::CurrentTexture);

@@ -37,7 +37,5 @@ private:
 public:
     void display(RenderWindow*, solaris*);
     void logic(int health);
-
-
 };
 

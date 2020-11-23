@@ -32,13 +32,10 @@ void HealthBar::logic(int health) {
        displaySprite.setTexture(tex1);
    } else if (health > 60) {
        displaySprite.setTexture(tex2);
-   }
    } else if (health > 40) {
        displaySprite.setTexture(tex3);
-   }
    } else if (health > 20) {
        displaySprite.setTexture(tex4);
-   }
    } else {
        displaySprite.setTexture(tex5);
    }

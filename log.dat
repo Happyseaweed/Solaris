@@ -1,4 +1,4 @@
-\[]-------------------- Game & Changes Log --------------------[]
+[]-------------------- Game & Changes Log --------------------[]
 Format:
   [date]-[name of author]
   [UX]
@@ -18,14 +18,27 @@ UI:
 
 []--------------------                    --------------------[]
 
+main.cpp    -     Main game loop
+driver.cpp  -     Contains all of essential function definations for various classes (Ray and Solaris)
+driver.h    -     Contains main game class and ray tracing class.
+UI.cpp      -     Main file for user interface functions.     
+UI.h        -     Contains class declarations for the UI class 
+
+Include paths:
+
+main.cpp <-- driver.h
+UI.cpp <-- UI.h, driver.h
+driver.cpp <-- UI.h, driver.h
+
+[] -------------------                    --------------------[]
 Changes log (newest at the top please!):
 
 Novemeber.22.2020 - Siweido & Ahmedo
 
-1. 
-2.
-3. 
-4. 
+1. None
+2. None
+3. Resolved spinning collision block issue by completely removing it.
+4. Luckily no
 
 August.06.2020 - Siweido
 

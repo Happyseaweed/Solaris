@@ -198,7 +198,13 @@ void solaris::initVariables(){
     this->healthBar.setPosition(700, 200);
 
     
+    this->circleHealth.setPosition(2220, 1220);
     cout << "UI Loaded." << endl;
+
+    cout << "Loading Minimap" << endl;
+    this->miniTex.loadFromFile("media/minimap.png");
+    this->miniSprite.setTexture(miniTex);
+
     // Shaders
     // shader.loadFromFile("include/blur.frag", Shader::Fragment);
     // shader.setParameter("texture", sf::Shader::CurrentTexture);
@@ -234,6 +240,8 @@ void solaris::initWindow(){
 
     // Making GUI Views
     this->guiView = this->window->getDefaultView();
+    this->miniView = this->window->getDefaultView();
+    this->miniSprite.setScale(Vector2f(100.f, 100.0f));
     this->miniView.setViewport(sf::FloatRect(0.75f, 0.f, 0.25f, 0.25f));
 }
 
@@ -263,6 +271,28 @@ void solaris::set_camera() {
 
     if (camera.getCenter().y + camera.getSize().y/2 > SPACE_HEIGHT){
         camera.setCenter(camera.getCenter().x, SPACE_HEIGHT - camera.getSize().y/2);
+    }
+    
+    // Centering the miniview
+    miniView.setCenter(astro.getPosition().x,
+                     astro.getPosition().y);
+    
+    
+    // Checking for camera going out of bounds
+    if (miniView.getCenter().x - miniView.getSize().x/2 < 0){
+        miniView.setCenter(0+miniView.getSize().x/2, miniView.getCenter().y);
+    }
+
+    if (miniView.getCenter().x + miniView.getSize().x/2 > SPACE_WIDTH){
+        miniView.setCenter(SPACE_WIDTH - miniView.getSize().x/2, miniView.getCenter().y);
+    }
+
+    if (miniView.getCenter().y - miniView.getSize().y/2 < 0){
+        miniView.setCenter(miniView.getCenter().x, 0+miniView.getSize().y/2 );
+    }
+
+    if (miniView.getCenter().y + miniView.getSize().y/2 > SPACE_HEIGHT){
+        miniView.setCenter(miniView.getCenter().x, SPACE_HEIGHT - miniView.getSize().y/2);
     }
     
 }
@@ -506,7 +536,13 @@ void solaris::outerspace_render(){
     this->window->setView(guiView);
     this->window->draw(this->circleHealth);
     this->window->draw(this->oxygenTank100);
+<<<<<<< HEAD
     this->window->draw(this->healthBar);
+=======
+
+    this->window->setView(miniView);
+    this->window->draw(this->miniSprite);
+>>>>>>> 82c9fbd66e6ed4a3132aa593d33d27a9eb1f703d
     this->window->display();
 }
 

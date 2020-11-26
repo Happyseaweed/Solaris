@@ -536,13 +536,10 @@ void solaris::outerspace_render(){
     this->window->setView(guiView);
     this->window->draw(this->circleHealth);
     this->window->draw(this->oxygenTank100);
-<<<<<<< HEAD
     this->window->draw(this->healthBar);
-=======
 
     this->window->setView(miniView);
     this->window->draw(this->miniSprite);
->>>>>>> 82c9fbd66e6ed4a3132aa593d33d27a9eb1f703d
     this->window->display();
 }
 

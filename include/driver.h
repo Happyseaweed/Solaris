@@ -221,6 +221,10 @@ class solaris {
 		
 		// Sprites
 		Texture oTank;
+
+		Texture miniTex;
+		Sprite miniSprite;
+		
 		Sprite oxygenTank100;
 		Sprite oxygenTank75;
 		Sprite oxygenTank50;

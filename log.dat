@@ -33,6 +33,13 @@ driver.cpp <-- UI.h, driver.h
 [] -------------------                    --------------------[]
 Changes log (newest at the top please!):
 
+November.26th.2020 - Siwei
+
+1. Added health bar sprite, changed oxygen tank sprite location & circular background
+2.  ^^^
+3. Added new sprites and textures
+4. Luckily no :P
+
 Novemeber.22.2020 - Siweido & Ahmedo
 
 1. None

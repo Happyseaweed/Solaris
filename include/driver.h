@@ -230,6 +230,9 @@ class solaris {
 		Texture cHealth;
 		Sprite circleHealth;
 
+		Texture healthB;
+		Sprite healthBar;
+
 		Vector2f astroAcc;
 		float astroRotVel;
 		float astroRotAcc;

@@ -182,14 +182,22 @@ void solaris::initVariables(){
     this->oxygenTank100.setOrigin(Vector2f(this->oTank.getSize().x/2, this->oTank.getSize().y/2));
     this->oxygenTank100.setScale(Vector2f(10.0f, 10.0f));
     
-    this->oxygenTank100.setPosition( 2350, 1345 );
+    this->oxygenTank100.setPosition( 2160, 1155 );
 
     
-    this->cHealth.loadFromFile("media/CircleHealth.png");
+    this->cHealth.loadFromFile("media/fullCircleHealth.png");
     this->circleHealth.setTexture(cHealth);
     this->circleHealth.setOrigin(Vector2f(this->cHealth.getSize().x/2, this->cHealth.getSize().y/2));
     this->circleHealth.setScale(Vector2f(5.0f, 5.0f));
-    this->circleHealth.setPosition( 2220, 1220);
+    this->circleHealth.setPosition( 2170, 1170);
+
+    this->healthB.loadFromFile("media/lineHealthBar.png");
+    this->healthBar.setTexture(healthB);
+    this->healthBar.setOrigin(Vector2f(this->healthB.getSize().x/2, this->healthB.getSize().y/2));
+    this->healthBar.setScale(Vector2f(10.0f, 10.0f));
+    this->healthBar.setPosition(700, 200);
+
+    
     cout << "UI Loaded." << endl;
     // Shaders
     // shader.loadFromFile("include/blur.frag", Shader::Fragment);
@@ -498,6 +506,7 @@ void solaris::outerspace_render(){
     this->window->setView(guiView);
     this->window->draw(this->circleHealth);
     this->window->draw(this->oxygenTank100);
+    this->window->draw(this->healthBar);
     this->window->display();
 }
 
@@ -620,6 +629,5 @@ void solaris::render(){
         case PAUSED:
             paused_render();
             break;
-
     }
 }

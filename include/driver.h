@@ -49,7 +49,6 @@ enum States {
 extern int gameState;
 extern int nextState;
 
-
 // Raycasting for player
 class Ray {
 private:
@@ -134,7 +133,6 @@ public:
 			float x4 = pos.x + dir.x;
 			float y4 = pos.y + dir.y;
 
-
 			// deninmator
 			float den = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
 			if (den == 0){
@@ -163,7 +161,6 @@ public:
 	}
 };
 
-
 // Solaris class
 class solaris {
 	friend class HealthBar;
@@ -182,6 +179,11 @@ class solaris {
 		Clock clock;
 		float dt;
 
+		// Game Buttons
+		Sprite interactionButton;
+		Texture intButton;
+		bool intRange;
+
 		// Titlescreen Variables
 		RectangleShape playButton;
 		RectangleShape quitButton;
@@ -191,7 +193,6 @@ class solaris {
 		Text quitText;
 		
 		bool pressed;
-		
 
 		// Outerspace
 		Texture backgroundTex;
@@ -218,13 +219,13 @@ class solaris {
 		// Habitat
 		Sprite habitat;
 		Texture habTexture;
-		
+
 		// Sprites
 		Texture oTank;
 
 		Texture miniTex;
 		Sprite miniSprite;
-		
+
 		Sprite oxygenTank100;
 		Sprite oxygenTank75;
 		Sprite oxygenTank50;
@@ -244,7 +245,7 @@ class solaris {
 		void astroApplyForce(Vector2f force);
 		void astroRotateForce(float d);
 		void teleport(Vector2f position);
-		
+
 		void set_camera();
 		View camera;
 		View guiView;
@@ -252,8 +253,6 @@ class solaris {
 		float SPACE_WIDTH;
 		float SPACE_HEIGHT;
 		float astroSpeed;
-
-
 
 		// Paused variable
 		RectangleShape pausedBackground;
@@ -299,7 +298,6 @@ class solaris {
 		void update();
 		void pollEvents();
 };
-
 
 // No one knows why tf this is here
 void change_state();

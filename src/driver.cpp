@@ -203,7 +203,7 @@ void solaris::initVariables(){
     cout << "UI Loaded." << endl;
 
     cout << "Loading Minimap" << endl;
-    this->miniTex.loadFromFile("media/minimap.png");
+    this->miniTex.loadFromFile("media/astronaut/bgimg.png");
     this->miniSprite.setTexture(miniTex);
     this->miniSprite.setOrigin(Vector2f(this->miniTex.getSize().x/2, this->miniTex.getSize().y/2));
     this->miniSprite.setScale(Vector2f(0.5f, 0.5f));
@@ -252,8 +252,9 @@ void solaris::initWindow(){
     // Making GUI Views
     this->guiView = this->window->getDefaultView();
     this->miniView = this->window->getDefaultView();
-    this->miniSprite.setScale(Vector2f(100.f, 100.0f));
+
     this->miniView.setViewport(sf::FloatRect(0.75f, 0.f, 0.25f, 0.25f));
+    this->miniSprite.setScale(sf::Vector2f(this->miniView.getSize().x/miniSprite.getTextureRect().width, this->miniView.getSize().y/miniSprite.getTextureRect().height));
 }
 
 // Accessors
@@ -288,17 +289,17 @@ void solaris::set_camera() {
     miniView.setCenter(astro.getPosition().x, astro.getPosition().y);
 
     // Checking for camera going out of bounds
-    if (miniView.getCenter().x - miniView.getSize().x/2 < 0){
-        miniView.setCenter(0+miniView.getSize().x/2, miniView.getCenter().y);
-    }
+    // if (miniView.getCenter().x - miniView.getSize().x/2 < 0){
+    //     miniView.setCenter(0+miniView.getSize().x/2, miniView.getCenter().y);
+    // }
 
-    if (miniView.getCenter().x + miniView.getSize().x/2 > SPACE_WIDTH){
-        miniView.setCenter(SPACE_WIDTH - miniView.getSize().x/2, miniView.getCenter().y);
-    }
+    // if (miniView.getCenter().x + miniView.getSize().x/2 > SPACE_WIDTH){
+    //     miniView.setCenter(SPACE_WIDTH - miniView.getSize().x/2, miniView.getCenter().y);
+    // }
 
-    if (miniView.getCenter().y - miniView.getSize().y/2 < 0){
-        miniView.setCenter(miniView.getCenter().x, 0+miniView.getSize().y/2 );
-    }
+    // if (miniView.getCenter().y - miniView.getSize().y/2 < 0){
+    //     miniView.setCenter(miniView.getCenter().x, 0+miniView.getSize().y/2 );
+    // }
 
     if (miniView.getCenter().y + miniView.getSize().y/2 > SPACE_HEIGHT){
         miniView.setCenter(miniView.getCenter().x, SPACE_HEIGHT - miniView.getSize().y/2);
@@ -509,7 +510,10 @@ void solaris::outerspace_render(){
     this->window->draw(this->healthBar);
  
     this->window->setView(miniView);
+    std::cout << "miniPlayer X: " << miniPlayer.getPosition().x << "| miniPlayer Y: " << miniPlayer.getPosition().y << std::endl;
+    std::cout << "astro X: " << astro.getPosition().x << "| astro Y: " << astro.getPosition().y << std::endl;
     this->window->draw(this->miniSprite);
+    this->window->draw(this->miniPlayer);
     this->window->display();
 }
 
@@ -568,6 +572,9 @@ void solaris::outerspace_update(){
     // RAY TESTING
     ray1.setPos(astro.getPosition());
     ray1.lookAt(Vector2f(this->window->mapPixelToCoords(Mouse::getPosition(*this->window)) ));
+
+    // MINIMAP
+    miniPlayer.setPosition(sf::Vector2f (astro.getPosition().x / 0.6, astro.getPosition().y / 0.6));
 }
 
 // Ship screens

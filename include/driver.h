@@ -215,6 +215,7 @@ class solaris {
 		float blocRotVel;
 		float blocRotAcc;
 
+
 		// Habitat
 		Sprite habitat;
 		Texture habTexture;
@@ -249,6 +250,7 @@ class solaris {
 		View camera;
 		View guiView;
 		View miniView;
+		CircleShape miniPlayer;
 		float SPACE_WIDTH;
 		float SPACE_HEIGHT;
 		float astroSpeed;

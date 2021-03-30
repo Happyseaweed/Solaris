@@ -58,11 +58,13 @@ solaris::solaris(){
 solaris::~solaris(){
     delete this->window;
 }
+
 // Initialization functions
 void solaris::initVariables(){
     this->window = nullptr;
 
     this->font.loadFromFile("media/zero_hour.ttf");
+
 // Paused
     // resume button
     this->resumeButton.setSize(Vector2f(500, 180));
@@ -137,13 +139,11 @@ void solaris::initVariables(){
     this->habitat.setScale(Vector2f(5.0f, 5.0f));
     this->habitat.setPosition(Vector2f(600, 300));
 
-
     this->backgroundTex.loadFromFile("media/astronaut/bgimg.png");
     this->spaceBackground.setTexture(backgroundTex);
     this->spaceBackground.setScale(Vector2f(6, 6));
     this->spaceBackground.setPosition(Vector2f(0, 0));
-    this->astroSpeed = 0.5;
-
+    this->astroSpeed = 0.75;
     
     // Moving Camera Section
     cout << "Loading Camera Section . . ." << endl;
@@ -164,11 +164,13 @@ void solaris::initVariables(){
     this->astro.setPosition(250, 250);
     this->astroVel = Vector2f(0, 0);
     this->astroAcc = Vector2f(0, 0);
+    this->astroRotAcc = 0;
+    this->astroRotVel = 0;
     cout << "Texture Loaded." << endl;
 
     // Collision block test;
-    this->bloc.loadFromFile("media/collision-block.png");
-    this->block.setTexture(bloc);
+    // this->bloc.loadFromFile("media/collision-block.png");
+    // this->block.setTexture(bloc);
     this->block.setOrigin(Vector2f(this->bloc.getSize().x/2, this->bloc.getSize().y/2));
     this->block.setScale(Vector2f(10.0f, 10.0f));
     this->block.setPosition(500, 500);
@@ -176,14 +178,14 @@ void solaris::initVariables(){
     this->blockAcc = Vector2f(0, 0);
 
     // OxygenTank
+    
     cout << "Loading UI . . ." << endl;
     this->oTank.loadFromFile("media/oxygenTank100.png");
     this->oxygenTank100.setTexture(oTank);
     this->oxygenTank100.setOrigin(Vector2f(this->oTank.getSize().x/2, this->oTank.getSize().y/2));
     this->oxygenTank100.setScale(Vector2f(10.0f, 10.0f));
-    
-    this->oxygenTank100.setPosition( 2160, 1155 );
 
+    this->oxygenTank100.setPosition(2160, 1155);
     
     this->cHealth.loadFromFile("media/fullCircleHealth.png");
     this->circleHealth.setTexture(cHealth);
@@ -197,7 +199,6 @@ void solaris::initVariables(){
     this->healthBar.setScale(Vector2f(10.0f, 10.0f));
     this->healthBar.setPosition(0+50, 0+25);
 
-    
     this->circleHealth.setPosition(2220, 1220);
     cout << "UI Loaded." << endl;
 
@@ -212,13 +213,22 @@ void solaris::initVariables(){
 
     // keyDown
     keyDown=true;
+    this->miniSprite.setOrigin(Vector2f(this->miniTex.getSize().x/2, this->miniTex.getSize().y/2));
+    this->miniSprite.setScale(Vector2f(0.5f, 0.5f));
+    this->miniSprite.setPosition(1000, 300);
+    
+    this->intButton.loadFromFile("media/interactionButton.png");
+    this->interactionButton.setTexture(intButton);
+    this->interactionButton.setOrigin(Vector2f(this->intButton.getSize().x/2, this->intButton.getSize().y/2));
+    this->interactionButton.setScale(Vector2f(.75f, .75f));
+    this->interactionButton.setPosition(1600, 700);
+    this->intRange = false;
 
     // Shaders
     // shader.loadFromFile("include/blur.frag", Shader::Fragment);
     // shader.setParameter("texture", sf::Shader::CurrentTexture);
     // shader.setParameter("blur_radius", 201);
     
-
     // RAY CaSting
     ray1.setPos(astro.getPosition());
 }
@@ -238,6 +248,7 @@ void solaris::teleport(Vector2f position){
 }
 
 void solaris::initWindow(){
+
     // Window
 	this->videoMode.height = SCREEN_HEIGHT;
     this->videoMode.width = SCREEN_WIDTH;
@@ -263,10 +274,10 @@ const bool solaris::running() const {
 }
 
 void solaris::set_camera() {
+
     // Centering the camera
     camera.setCenter(astro.getPosition().x,
                      astro.getPosition().y);
-    
     
     // Checking for camera going out of bounds
     if (camera.getCenter().x - camera.getSize().x/2 < 0){
@@ -284,12 +295,10 @@ void solaris::set_camera() {
     if (camera.getCenter().y + camera.getSize().y/2 > SPACE_HEIGHT){
         camera.setCenter(camera.getCenter().x, SPACE_HEIGHT - camera.getSize().y/2);
     }
-    
+
     // Centering the miniview
-    // miniView.setCenter(astro.getPosition().x,
-    //                    astro.getPosition().y);
-    
-    
+    miniView.setCenter(astro.getPosition().x, astro.getPosition().y);
+
     // Checking for camera going out of bounds
     // if (miniView.getCenter().x - miniView.getSize().x/2 < 0){
     //     miniView.setCenter(0+miniView.getSize().x/2, miniView.getCenter().y);
@@ -303,17 +312,14 @@ void solaris::set_camera() {
     //     miniView.setCenter(miniView.getCenter().x, 0+miniView.getSize().y/2 );
     // }
 
-    // if (miniView.getCenter().y + miniView.getSize().y/2 > SPACE_HEIGHT){
-    //     miniView.setCenter(miniView.getCenter().x, SPACE_HEIGHT - miniView.getSize().y/2);
-    // }
-    
+    if (miniView.getCenter().y + miniView.getSize().y/2 > SPACE_HEIGHT){
+        miniView.setCenter(miniView.getCenter().x, SPACE_HEIGHT - miniView.getSize().y/2);
+    }   
 }
-
 
 // Event functions ----------------------------------------------------------- //
 void solaris::pollEvents(){
     // Event polling;
-
     while(this->window->pollEvent(this->event)){
         //titlescreen_update();
         switch(event.type){
@@ -328,11 +334,9 @@ void solaris::pollEvents(){
             break;
         }
     }
-
-
 }
 
-// Title Screen ---------------------------------------------------------------------------------------//
+// Title Screen --------------------------------------------------------------------------------------- //
 
 void solaris::titlescreen_logic(){
     // Mouse clicks the button
@@ -362,7 +366,6 @@ void solaris::titlescreen_render(){
     this->window->draw(quitButton);
     this->window->draw(quitText);
     this->window->display();
-
 }
 
 void solaris::titlescreen_update(){
@@ -434,10 +437,11 @@ void solaris::overworld_update(){
 
 // outerspace Screen----------------------------------------------------------------//
 void solaris::outerspace_logic(){
+
     // collison fpr walls
     if (this->astro.getGlobalBounds().top < 0 || this->astro.getGlobalBounds().top+this->astro.getGlobalBounds().height > SPACE_HEIGHT){
         this->astroVel.y *= -2; 
-    } 
+    }
     else if (this->astro.getGlobalBounds().left < 0 || this->astro.getGlobalBounds().left+this->astro.getGlobalBounds().width > SPACE_WIDTH){
         this->astroVel.x *= -2;
     } else {
@@ -455,63 +459,29 @@ void solaris::outerspace_logic(){
             astroApplyForce(Vector2f(0, astroSpeed));
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Q)) {
-            astroRotateForce(-0.5);
+            astroRotateForce(-0.75);
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::E)) {
-            astroRotateForce(0.5);
+            astroRotateForce(0.75);
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Space)){
-            //teleport(Vector2f(this->pt.getPosition().x, this->pt.getPosition().y));
-            astroVel.x += 1;
-            astroVel.y += 1;
+            teleport(Vector2f(this->pt.getPosition().x, this->pt.getPosition().y));
+            //astroVel.x += 1;
+            //astroVel.y += 1;
         }
     }
+
     // Block collision with Boundary
-    if (this->block.getGlobalBounds().top < 0 || this->block.getGlobalBounds().top+this->block.getGlobalBounds().height > SPACE_HEIGHT){
-        this->blockVel.y *= -2; 
-    } 
-    else if (this->block.getGlobalBounds().left < 0 || this->block.getGlobalBounds().left+this->block.getGlobalBounds().width > SPACE_WIDTH){
-        this->blockVel.x *= -2;
+
+    if (this->astro.getGlobalBounds().intersects(this->habitat.getGlobalBounds())){    
+        astroVel.x *= -1;
+        astroVel.y *= -1;
     }
+    Vector2f astroPos = astro.getPosition();
+    Vector2f habitatPos = habitat.getPosition();
 
-    // Block Collision with Player
-    if (this->astro.getGlobalBounds().intersects(this->block.getGlobalBounds())){
-        // get angle of collision with respect to block (as origin);
-        
-        // Centers of player and block
-        Vector2f playerCenter = Vector2f(this->astro.getPosition().x/2, this->astro.getPosition().y/2);
-        Vector2f blockCenter = Vector2f(this->block.getPosition().x/2, this->block.getPosition().y/2);
-        // Differences 
-        float xdif = playerCenter.x - blockCenter.x;
-        float ydif = playerCenter.y - blockCenter.y;
-        
-        // angles + length
-        float theta = (atan(ydif/xdif)*3.14159)/180; // angle relative to block
-        float diff = sqrt(xdif*xdif + ydif*ydif); // length of collision vector, kinda useless at the moment
-
-        // velocities of player
-        float X = astroVel.x; 
-        float Y = astroVel.y;
-
-        float alpha = (atan(X/Y)*3.14159)/180;
-        int colQuad = 0;
-
-        if (xdif > 0 && ydif > 0) colQuad = 3;
-        else if (xdif < 0 && ydif < 0) colQuad = 1;
-        else if (xdif < 0 && ydif > 0) colQuad = 4;
-        else if (xdif > 0 && ydif < 0) colQuad = 2;
-
-        float phi = 0;
-
-        if (colQuad == 1 || colQuad == 3){
-            phi = min(alpha+theta, (90-alpha)+(90-theta) );
-        }   
-        else if (colQuad == 2 || colQuad == 4){
-            phi = min(alpha + (90-theta), (90-alpha)+theta );
-        }
-        
-        // rotation
-        //blocRotAcc += sqrt(X*X + Y*Y) * cos(phi);
+    habitatPos.x -= habTexture.getSize().x/2;
+    habitatPos.y += habTexture.getSize().y/2;
 
         // Get velocity
         blockVel.x = astroVel.x*2;
@@ -530,8 +500,16 @@ void solaris::outerspace_logic(){
             showMap = 1;
         else
             showMap = 0.5;
+    float xdiff = astroPos.x - habitatPos.x;
+    float ydiff = astroPos.y - habitatPos.y;
+
+    float dist = sqrt(xdiff*xdiff + ydiff*ydiff);
+    if (dist < 150){
+        intRange = true;
+        interactionButton.setPosition(Vector2f(habitatPos.x, habitatPos.y+100));
+    }else{
+        intRange = false;
     }
-    
 }
 
 void solaris::outerspace_render(){
@@ -539,11 +517,9 @@ void solaris::outerspace_render(){
     set_camera();
     this->window->setView(camera);
 
-    
     this->pt.setRadius(10);
     this->pt.setOrigin(pt.getRadius(), pt.getRadius() );
     this->pt.setPosition(ray1.cast(block.getGlobalBounds()));
-  
 
     // drawing scene
     this->window->clear();
@@ -553,14 +529,14 @@ void solaris::outerspace_render(){
     this->window->draw(this->habitat);
     this->window->draw(pt);
     this->window->draw(this->ray1.line, 20, Lines);
-
+    if (intRange) this->window->draw(this->interactionButton);
 
     // Drawing GUI
     this->window->setView(guiView);
     this->window->draw(this->circleHealth);
     this->window->draw(this->oxygenTank100);
     this->window->draw(this->healthBar);
-
+ 
     this->window->setView(miniView);
     // std::cout << "miniPlayer X: " << miniPlayer.getPosition().x << "| miniPlayer Y: " << miniPlayer.getPosition().y << std::endl;
     // std::cout << "astro X: " << astro.getPosition().x << "| astro Y: " << astro.getPosition().y << std::endl;
@@ -574,7 +550,6 @@ void solaris::outerspace_update(){
     // getting direction
     dir.y = -std::cos(( this->astro.getRotation() * 3.14) / 180);
     dir.x = std::sin(( this->astro.getRotation() * 3.14) / 180);
-
 
     // apply astro forces
     if (abs(astroVel.x) < 2 && abs(astroVel.y) < 2){
@@ -607,6 +582,7 @@ void solaris::outerspace_update(){
     this->blockVel.y *= 0.5;
     this->blocRotVel *= 0.8;
     this->astroRotVel *= 0.8;
+
     if (abs(this->astroVel.x) < 0.1) this->astroVel.x = 0;
     if (abs(this->astroVel.y) < 0.1) this->astroVel.y = 0;
     if (abs(this->blockVel.x) < 0.2) this->blockVel.x = 0;
@@ -614,7 +590,7 @@ void solaris::outerspace_update(){
     if (abs(this->astroRotVel) < 0.2) this->astroRotVel = 0;
     if (abs(this->blocRotVel) < 0.2) this->blocRotVel = 0;
 
-    // Resastrocceleration so program doesn't bReAk
+    // Reset astrocceleration so program doesn't bReAk
 
     this->astroRotAcc = 0;
     this->blocRotAcc = 0;

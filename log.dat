@@ -5,16 +5,6 @@ Format:
   [UI]
   [CHANGES]
   [NEW BUGS]
-[]--------------------                    --------------------[]
-
-Bugs & Errors List:
-1. Player sprite is glitched
-
-UX:
-1. Collision is absolutely bonkers
-
-UI:
-1. Collision block disappears for some reason.
 
 []--------------------                    --------------------[]
 
@@ -23,18 +13,18 @@ driver.cpp  -     Contains all of essential function definations for various cla
 driver.h    -     Contains main game class and ray tracing class.
 UI.cpp      -     Main file for user interface functions.     
 UI.h        -     Contains class declarations for the UI class 
-
-Include paths:
-
-main.cpp <-- driver.h
-UI.cpp <-- UI.h, driver.h
-driver.cpp <-- UI.h, driver.h
+Other files -     Organized code for all events and game states
 
 [] -------------------                    --------------------[]
 Changes log (newest at the top please!):
 
-January.21.2021 - Siwei
 
+March.29.2021 - Ahmed & Siwei
+1. New user interface
+2. New sprites: Healthbar, Oxygenbar and removed collision blocks, circle display and old oxygen tank
+3. NEW FILE SYSTEM, a bit more organized than before, easier to access.
+   Removed uneccessary code and commented code.
+4. None so far
 
 
 November.26th.2020 - Siwei

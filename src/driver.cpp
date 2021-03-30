@@ -22,7 +22,6 @@
 using namespace std;
 using namespace sf;
 
-
 // variables for gamestates
 int gameState = TITLESCREEN;
 int nextState = STATE_NULL;
@@ -42,9 +41,15 @@ void change_state() {
             case OVERWORLD:
                 gameState = OVERWORLD;
                 nextState = STATE_NULL;
+                break;
             case OUTERSPACE:
                 gameState = OUTERSPACE;
                 nextState = STATE_NULL;
+                break;
+            case SHIP:
+                gameState = SHIP;
+                nextState = STATE_NULL;
+                break;
         }
     }
 }
@@ -62,7 +67,6 @@ solaris::~solaris(){
 // Initialization functions
 void solaris::initVariables(){
     this->window = nullptr;
-
     this->font.loadFromFile("media/zero_hour.ttf");
 
 // Paused
@@ -103,7 +107,7 @@ void solaris::initVariables(){
     this->mainTitles.setPosition((SCREEN_WIDTH - bounds.width)/2, 400);
     this->mainTitles.setFillColor(Color::White);
  
-    // PLay Button
+    // Play Button
     this->playButton.setSize(Vector2f(500, 180));
     this->playButton.setFillColor(Color::White);
     this->pressed = false;
@@ -143,7 +147,7 @@ void solaris::initVariables(){
     this->spaceBackground.setTexture(backgroundTex);
     this->spaceBackground.setScale(Vector2f(6, 6));
     this->spaceBackground.setPosition(Vector2f(0, 0));
-    this->astroSpeed = 0.75;
+    this->astroSpeed = 1;
     
     // Moving Camera Section
     cout << "Loading Camera Section . . ." << endl;
@@ -180,26 +184,18 @@ void solaris::initVariables(){
     // OxygenTank
     
     cout << "Loading UI . . ." << endl;
-    this->oTank.loadFromFile("media/oxygenTank100.png");
-    this->oxygenTank100.setTexture(oTank);
-    this->oxygenTank100.setOrigin(Vector2f(this->oTank.getSize().x/2, this->oTank.getSize().y/2));
-    this->oxygenTank100.setScale(Vector2f(10.0f, 10.0f));
-
-    this->oxygenTank100.setPosition(2160, 1155);
-    
-    this->cHealth.loadFromFile("media/fullCircleHealth.png");
-    this->circleHealth.setTexture(cHealth);
-    this->circleHealth.setOrigin(Vector2f(this->cHealth.getSize().x/2, this->cHealth.getSize().y/2));
-    this->circleHealth.setScale(Vector2f(5.0f, 5.0f));
-    this->circleHealth.setPosition( 0-100, 0+100);
 
     this->healthB.loadFromFile("media/lineHealthBar.png");
     this->healthBar.setTexture(healthB);
     //this->healthBar.setOrigin(Vector2f(this->healthB.getSize().x/2, this->healthB.getSize().y/2));
-    this->healthBar.setScale(Vector2f(10.0f, 10.0f));
+    this->healthBar.setScale(Vector2f(5.0f, 5.0f));
     this->healthBar.setPosition(0+50, 0+25);
 
-    this->circleHealth.setPosition(2220, 1220);
+    this->oxygenB.loadFromFile("media/lineOxygenTank.png");
+    this->oxygenBar.setTexture(oxygenB);
+    this->oxygenBar.setScale(Vector2f(5.0f, 5.0f));
+    this->oxygenBar.setPosition(0+50, 0+200);
+
     cout << "UI Loaded." << endl;
 
     // Minimap
@@ -213,9 +209,9 @@ void solaris::initVariables(){
 
     // keyDown
     keyDown=true;
-    this->miniSprite.setOrigin(Vector2f(this->miniTex.getSize().x/2, this->miniTex.getSize().y/2));
-    this->miniSprite.setScale(Vector2f(0.5f, 0.5f));
-    this->miniSprite.setPosition(1000, 300);
+    // this->miniSprite.setOrigin(Vector2f(this->miniTex.getSize().x/2, this->miniTex.getSize().y/2));
+    // this->miniSprite.setScale(Vector2f(0.5f, 0.5f));
+    // this->miniSprite.setPosition(1000, 300);
     
     this->intButton.loadFromFile("media/interactionButton.png");
     this->interactionButton.setTexture(intButton);
@@ -248,7 +244,6 @@ void solaris::teleport(Vector2f position){
 }
 
 void solaris::initWindow(){
-
     // Window
 	this->videoMode.height = SCREEN_HEIGHT;
     this->videoMode.width = SCREEN_WIDTH;
@@ -265,7 +260,6 @@ void solaris::initWindow(){
     float padding = 0.005;
     this->miniView.setViewport(sf::FloatRect(0.75f-padding, 0.f+padding, 0.25f, 0.25f));
     this->miniSprite.setScale(sf::Vector2f(this->miniView.getSize().x/miniSprite.getTextureRect().width, this->miniView.getSize().y/miniSprite.getTextureRect().height));
-
 }
 
 // Accessors
@@ -274,7 +268,6 @@ const bool solaris::running() const {
 }
 
 void solaris::set_camera() {
-
     // Centering the camera
     camera.setCenter(astro.getPosition().x,
                      astro.getPosition().y);
@@ -295,26 +288,6 @@ void solaris::set_camera() {
     if (camera.getCenter().y + camera.getSize().y/2 > SPACE_HEIGHT){
         camera.setCenter(camera.getCenter().x, SPACE_HEIGHT - camera.getSize().y/2);
     }
-
-    // Centering the miniview
-    miniView.setCenter(astro.getPosition().x, astro.getPosition().y);
-
-    // Checking for camera going out of bounds
-    // if (miniView.getCenter().x - miniView.getSize().x/2 < 0){
-    //     miniView.setCenter(0+miniView.getSize().x/2, miniView.getCenter().y);
-    // }
-
-    // if (miniView.getCenter().x + miniView.getSize().x/2 > SPACE_WIDTH){
-    //     miniView.setCenter(SPACE_WIDTH - miniView.getSize().x/2, miniView.getCenter().y);
-    // }
-
-    // if (miniView.getCenter().y - miniView.getSize().y/2 < 0){
-    //     miniView.setCenter(miniView.getCenter().x, 0+miniView.getSize().y/2 );
-    // }
-
-    if (miniView.getCenter().y + miniView.getSize().y/2 > SPACE_HEIGHT){
-        miniView.setCenter(miniView.getCenter().x, SPACE_HEIGHT - miniView.getSize().y/2);
-    }   
 }
 
 // Event functions ----------------------------------------------------------- //
@@ -329,297 +302,16 @@ void solaris::pollEvents(){
                 if (this->event.key.code == Keyboard::Escape){
                     if (gameState == TITLESCREEN) this->window->close();
                     else if (gameState == OUTERSPACE) nextState = PAUSED;
-                    else if (gameState == PAUSED) nextState = SHIP;
+                    else if (gameState == PAUSED) nextState = OUTERSPACE;
                 }
             break;
         }
     }
 }
 
-// Title Screen --------------------------------------------------------------------------------------- //
 
-void solaris::titlescreen_logic(){
-    // Mouse clicks the button
-    // Play button
-    if (playButton.getGlobalBounds().contains(Mouse::getPosition(*this->window).x, Mouse::getPosition(*this->window).y) ){
-
-        if (pressed) { // Clicks Play
-            cout << "ahmed has small pp" << endl;
-            pressed = false;
-            nextState = OUTERSPACE;
-        }
-    }
-    // Quit button
-    if (quitButton.getGlobalBounds().contains(Mouse::getPosition(*this->window).x, Mouse::getPosition(*this->window).y) ){
-        if (pressed){ // Clicks the quit button
-            this->window->close();
-        }
-    }
-
-}
-
-void solaris::titlescreen_render(){
-    this->window->clear();
-    this->window->draw(mainTitles);
-    this->window->draw(playButton);
-    this->window->draw(playText);
-    this->window->draw(quitButton);
-    this->window->draw(quitText);
-    this->window->display();
-}
-
-void solaris::titlescreen_update(){
-    switch(event.type){
-        case sf::Event::MouseButtonPressed:
-            pressed = true;
-            break;
-        case sf::Event::MouseButtonReleased:
-            pressed = false;
-            break;
-    }
-
-}
-
-// Pause Screen --------------------------------------------------------------//
-
-void solaris::paused_logic(){
-    // Resume button, when clicked, returns to previous state
-    if (resumeButton.getGlobalBounds().contains(Mouse::getPosition(*this->window).x, Mouse::getPosition(*this->window).y) ){
-        if (pressed) {
-            pressed = false;
-            nextState = OUTERSPACE;
-        }
-    }
-    // Quit button, when clicked, quits the program
-    if (quitPause.getGlobalBounds().contains(Mouse::getPosition(*this->window).x, Mouse::getPosition(*this->window).y) ){
-        if (pressed){
-            pressed = false;
-            this->window->close();
-        }
-    }
-}
-
-void solaris::paused_render(){
-    this->window->setView(this->window->getDefaultView());
-    this->window->clear();
-    this->window->draw(resumeButton);
-    this->window->draw(resumeText);
-    this->window->draw(quitPause);
-    this->window->draw(quitPauseText);
-    this->window->display();
-}
-
-void solaris::paused_update(){
-
-    switch(event.type){
-        case sf::Event::MouseButtonPressed:
-            pressed = true;
-            break;
-        case sf::Event::MouseButtonReleased:
-            pressed = false;
-            break;
-    }
-}
-
-// OVERWORLD Screen-----------------------------------------------------------//
-
-void solaris::overworld_logic() {
-
-}
-
-void solaris::overworld_render() {
-
-}
-
-void solaris::overworld_update(){
-
-}
-
-// outerspace Screen----------------------------------------------------------------//
-void solaris::outerspace_logic(){
-
-    // collison fpr walls
-    if (this->astro.getGlobalBounds().top < 0 || this->astro.getGlobalBounds().top+this->astro.getGlobalBounds().height > SPACE_HEIGHT){
-        this->astroVel.y *= -2; 
-    }
-    else if (this->astro.getGlobalBounds().left < 0 || this->astro.getGlobalBounds().left+this->astro.getGlobalBounds().width > SPACE_WIDTH){
-        this->astroVel.x *= -2;
-    } else {
-        // movement for ship
-        if (Keyboard::isKeyPressed(Keyboard::Key::W)){
-            astroApplyForce(Vector2f(0, -astroSpeed));
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Key::A)) {
-            astroApplyForce(Vector2f(-astroSpeed, 0));
-        } 
-        if (Keyboard::isKeyPressed(Keyboard::Key::D)) {
-            astroApplyForce(Vector2f(astroSpeed, 0));
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Key::S)) {
-            astroApplyForce(Vector2f(0, astroSpeed));
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Key::Q)) {
-            astroRotateForce(-0.75);
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Key::E)) {
-            astroRotateForce(0.75);
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Key::Space)){
-            teleport(Vector2f(this->pt.getPosition().x, this->pt.getPosition().y));
-            //astroVel.x += 1;
-            //astroVel.y += 1;
-        }
-    }
-
-    // Block collision with Boundary
-
-    if (this->astro.getGlobalBounds().intersects(this->habitat.getGlobalBounds())){    
-        astroVel.x *= -1;
-        astroVel.y *= -1;
-    }
-    Vector2f astroPos = astro.getPosition();
-    Vector2f habitatPos = habitat.getPosition();
-
-    habitatPos.x -= habTexture.getSize().x/2;
-    habitatPos.y += habTexture.getSize().y/2;
-
-        // Get velocity
-        blockVel.x = astroVel.x*2;
-        blockVel.y = astroVel.y*2;
-        astroVel.x *= -0.2;
-        astroVel.y *= -0.2;
-    }
-
-    if (!Keyboard::isKeyPressed(Keyboard::Key::M))
-        keyDown = true;
-
-    if (Keyboard::isKeyPressed(Keyboard::Key::M )&& keyDown){
-        keyDown=false;
-        std::cout << "testtt" << std::endl;
-        if (showMap == 0.5)
-            showMap = 1;
-        else
-            showMap = 0.5;
-    float xdiff = astroPos.x - habitatPos.x;
-    float ydiff = astroPos.y - habitatPos.y;
-
-    float dist = sqrt(xdiff*xdiff + ydiff*ydiff);
-    if (dist < 150){
-        intRange = true;
-        interactionButton.setPosition(Vector2f(habitatPos.x, habitatPos.y+100));
-    }else{
-        intRange = false;
-    }
-}
-
-void solaris::outerspace_render(){
-    // set the camera
-    set_camera();
-    this->window->setView(camera);
-
-    this->pt.setRadius(10);
-    this->pt.setOrigin(pt.getRadius(), pt.getRadius() );
-    this->pt.setPosition(ray1.cast(block.getGlobalBounds()));
-
-    // drawing scene
-    this->window->clear();
-    this->window->draw(this->spaceBackground);
-    this->window->draw(this->block);
-    this->window->draw(this->astro);
-    this->window->draw(this->habitat);
-    this->window->draw(pt);
-    this->window->draw(this->ray1.line, 20, Lines);
-    if (intRange) this->window->draw(this->interactionButton);
-
-    // Drawing GUI
-    this->window->setView(guiView);
-    this->window->draw(this->circleHealth);
-    this->window->draw(this->oxygenTank100);
-    this->window->draw(this->healthBar);
- 
-    this->window->setView(miniView);
-    // std::cout << "miniPlayer X: " << miniPlayer.getPosition().x << "| miniPlayer Y: " << miniPlayer.getPosition().y << std::endl;
-    // std::cout << "astro X: " << astro.getPosition().x << "| astro Y: " << astro.getPosition().y << std::endl;
-    this->window->draw(this->miniSprite);
-    this->window->draw(this->miniPlayer);
-    this->window->display();
-}
-
-void solaris::outerspace_update(){
-    
-    // getting direction
-    dir.y = -std::cos(( this->astro.getRotation() * 3.14) / 180);
-    dir.x = std::sin(( this->astro.getRotation() * 3.14) / 180);
-
-    // apply astro forces
-    if (abs(astroVel.x) < 2 && abs(astroVel.y) < 2){
-        this->astroVel += this->astroAcc;
-    }
-    this->astroRotVel += this->astroRotAcc;
-    this->blocRotVel += this->blocRotAcc;
-    // Sprite astroge depending on direction of movement
-    // Decided to store sprites seperately, instead of loading them everytime, to prevent glitches
-    if (this->astroVel.x > 0){
-        this->astro.setTexture(astroRightTex);
-    } else {
-        this->astro.setTexture(astroLeftTex);
-    }
-    if (this->astroVel == Vector2f(0, 0)){
-        this->astro.setTexture(astroTex);
-    }
-
-    // moves/trotate ship
-    this->astro.rotate(this->astroRotVel);
-    this->astro.move(this->astroVel);
-    this->block.move(this->blockVel);
-    this->block.rotate(this->blocRotVel);
-    //this->block.rotate(0.02);
-
-    // disapating forces
-    this->astroVel.x *= 0.99;
-    this->astroVel.y *= 0.99;
-    this->blockVel.x *= 0.5;
-    this->blockVel.y *= 0.5;
-    this->blocRotVel *= 0.8;
-    this->astroRotVel *= 0.8;
-
-    if (abs(this->astroVel.x) < 0.1) this->astroVel.x = 0;
-    if (abs(this->astroVel.y) < 0.1) this->astroVel.y = 0;
-    if (abs(this->blockVel.x) < 0.2) this->blockVel.x = 0;
-    if (abs(this->blockVel.y) < 0.2) this->blockVel.y = 0;
-    if (abs(this->astroRotVel) < 0.2) this->astroRotVel = 0;
-    if (abs(this->blocRotVel) < 0.2) this->blocRotVel = 0;
-
-    // Reset astrocceleration so program doesn't bReAk
-
-    this->astroRotAcc = 0;
-    this->blocRotAcc = 0;
-    this->astroAcc.x = 0;
-    this->astroAcc.y = 0;
-
-    // RAY TESTING
-    ray1.setPos(astro.getPosition());
-    ray1.lookAt(Vector2f(this->window->mapPixelToCoords(Mouse::getPosition(*this->window)) ));
-
-    // MINIMAP
-    sf::Vector2f viewSize = miniView.getSize();
-    sf::Vector2f bigSize = sf::Vector2f (SPACE_WIDTH, SPACE_HEIGHT);
-    sf::Vector2f astroPos = astro.getPosition();
-    sf::Vector2f convertPos = sf::Vector2f(viewSize.x / (bigSize.x / astroPos.x), viewSize.y / (bigSize.y / astroPos.y));
-    miniPlayer.setPosition(convertPos);
-    miniPlayer.setColor(sf::Color(255, 255, 255, showMap*255));
-    miniSprite.setColor(sf::Color(255, 255, 255, showMap*255));
-}
-
-// Ship screens
-void solaris::ship_logic(){
-
-}
-void solaris::ship_render(){
-    
-}
-void solaris::ship_update(){
-    
+float solaris::interactionCurve(float t){
+    return sin(1/(0.3+t));
 }
 
 //  Main Update Function
@@ -641,6 +333,7 @@ void solaris::update(){
             break;
     }
 }
+
 // Main Logic Function
 void solaris::logic(){
     switch (gameState) {
@@ -658,6 +351,7 @@ void solaris::logic(){
             break;
     }
 }
+
 // Render functions
 void solaris::render(){
     switch (gameState) {

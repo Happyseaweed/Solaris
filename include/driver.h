@@ -244,6 +244,9 @@ class solaris {
 
 		Texture healthB;
 		Sprite healthBar;
+		
+		Texture oxygenB;
+		Sprite oxygenBar;
 
 		Vector2f astroAcc;
 		float astroRotVel;
@@ -304,6 +307,7 @@ class solaris {
 		void render();
 		void update();
 		void pollEvents();
+		float interactionCurve(float t);
 };
 
 // No one knows why tf this is here

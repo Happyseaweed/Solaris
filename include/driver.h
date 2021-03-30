@@ -203,6 +203,8 @@ class solaris {
 		Vector2f astroVel;
 		Shader shader;
 
+		bool keyDown;
+
 		// Ray testing
 		Ray ray1;
 		CircleShape pt;
@@ -224,7 +226,11 @@ class solaris {
 		Texture oTank;
 
 		Texture miniTex;
+		Texture miniPlayerTex;
 		Sprite miniSprite;
+		Sprite miniPlayer;
+		float showMap;
+
 		
 		Sprite oxygenTank100;
 		Sprite oxygenTank75;
@@ -250,7 +256,6 @@ class solaris {
 		View camera;
 		View guiView;
 		View miniView;
-		CircleShape miniPlayer;
 		float SPACE_WIDTH;
 		float SPACE_HEIGHT;
 		float astroSpeed;

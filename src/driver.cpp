@@ -189,22 +189,29 @@ void solaris::initVariables(){
     this->circleHealth.setTexture(cHealth);
     this->circleHealth.setOrigin(Vector2f(this->cHealth.getSize().x/2, this->cHealth.getSize().y/2));
     this->circleHealth.setScale(Vector2f(5.0f, 5.0f));
-    this->circleHealth.setPosition( 2170, 1170);
+    this->circleHealth.setPosition( 0-100, 0+100);
 
     this->healthB.loadFromFile("media/lineHealthBar.png");
     this->healthBar.setTexture(healthB);
-    this->healthBar.setOrigin(Vector2f(this->healthB.getSize().x/2, this->healthB.getSize().y/2));
+    //this->healthBar.setOrigin(Vector2f(this->healthB.getSize().x/2, this->healthB.getSize().y/2));
     this->healthBar.setScale(Vector2f(10.0f, 10.0f));
-    this->healthBar.setPosition(700, 200);
+    this->healthBar.setPosition(0+50, 0+25);
 
     
     this->circleHealth.setPosition(2220, 1220);
     cout << "UI Loaded." << endl;
 
+    // Minimap
     cout << "Loading Minimap" << endl;
-    this->miniTex.loadFromFile("media/astronaut/bgimg.png");
+    this->miniTex.loadFromFile("media/minimap.png");
+    this->miniPlayerTex.loadFromFile("media/astronaut/minipointer.png");
     this->miniSprite.setTexture(miniTex);
-    this->miniPlayer.setRadius(20.0f);
+    this->miniPlayer.setTexture(miniPlayerTex);
+    this->miniPlayer.setScale(sf::Vector2f(8,8));
+    showMap = 1;
+
+    // keyDown
+    keyDown=true;
 
     // Shaders
     // shader.loadFromFile("include/blur.frag", Shader::Fragment);
@@ -241,10 +248,13 @@ void solaris::initWindow(){
 
     // Making GUI Views
     this->guiView = this->window->getDefaultView();
+    //this->guiView.setViewport(sf::FloatRect(1, 1, 1, 1));
     this->miniView = this->window->getDefaultView();
 
-    this->miniView.setViewport(sf::FloatRect(0.75f, 0.f, 0.25f, 0.25f));
+    float padding = 0.005;
+    this->miniView.setViewport(sf::FloatRect(0.75f-padding, 0.f+padding, 0.25f, 0.25f));
     this->miniSprite.setScale(sf::Vector2f(this->miniView.getSize().x/miniSprite.getTextureRect().width, this->miniView.getSize().y/miniSprite.getTextureRect().height));
+
 }
 
 // Accessors
@@ -508,7 +518,18 @@ void solaris::outerspace_logic(){
         blockVel.y = astroVel.y*2;
         astroVel.x *= -0.2;
         astroVel.y *= -0.2;
+    }
 
+    if (!Keyboard::isKeyPressed(Keyboard::Key::M))
+        keyDown = true;
+
+    if (Keyboard::isKeyPressed(Keyboard::Key::M )&& keyDown){
+        keyDown=false;
+        std::cout << "testtt" << std::endl;
+        if (showMap == 0.5)
+            showMap = 1;
+        else
+            showMap = 0.5;
     }
     
 }
@@ -541,8 +562,8 @@ void solaris::outerspace_render(){
     this->window->draw(this->healthBar);
 
     this->window->setView(miniView);
-    std::cout << "miniPlayer X: " << miniPlayer.getPosition().x << "| miniPlayer Y: " << miniPlayer.getPosition().y << std::endl;
-    std::cout << "astro X: " << astro.getPosition().x << "| astro Y: " << astro.getPosition().y << std::endl;
+    // std::cout << "miniPlayer X: " << miniPlayer.getPosition().x << "| miniPlayer Y: " << miniPlayer.getPosition().y << std::endl;
+    // std::cout << "astro X: " << astro.getPosition().x << "| astro Y: " << astro.getPosition().y << std::endl;
     this->window->draw(this->miniSprite);
     this->window->draw(this->miniPlayer);
     this->window->display();
@@ -605,7 +626,13 @@ void solaris::outerspace_update(){
     ray1.lookAt(Vector2f(this->window->mapPixelToCoords(Mouse::getPosition(*this->window)) ));
 
     // MINIMAP
-    miniPlayer.setPosition(sf::Vector2f (astro.getPosition().x / 0.6, astro.getPosition().y / 0.6));
+    sf::Vector2f viewSize = miniView.getSize();
+    sf::Vector2f bigSize = sf::Vector2f (SPACE_WIDTH, SPACE_HEIGHT);
+    sf::Vector2f astroPos = astro.getPosition();
+    sf::Vector2f convertPos = sf::Vector2f(viewSize.x / (bigSize.x / astroPos.x), viewSize.y / (bigSize.y / astroPos.y));
+    miniPlayer.setPosition(convertPos);
+    miniPlayer.setColor(sf::Color(255, 255, 255, showMap*255));
+    miniSprite.setColor(sf::Color(255, 255, 255, showMap*255));
 }
 
 // Ship screens

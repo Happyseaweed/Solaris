@@ -92,8 +92,6 @@ void solaris::ship_render(){
     this->window->draw(this->miniPlayer);
     this->window->display();
 }
-
-
 void solaris::ship_update(){
     dir.y = -std::cos(( this->astro.getRotation() * 3.14) / 180);
     dir.x = std::sin(( this->astro.getRotation() * 3.14) / 180);

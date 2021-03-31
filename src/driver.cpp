@@ -219,6 +219,8 @@ void solaris::initVariables(){
     this->interactionButton.setScale(Vector2f(.75f, .75f));
     this->interactionButton.setPosition(1600, 700);
     this->intRange = false;
+    this->currFrame = 0;
+    this->animStart = false;
 
     // Shaders
     // shader.loadFromFile("include/blur.frag", Shader::Fragment);
@@ -311,24 +313,27 @@ void solaris::pollEvents(){
 
 
 float solaris::interactionCurve(float t){
-    return sin(1/(0.3+t));
+    return sin(1/(0.211+pow(t, 7))) + 1;
 }
 
 //  Main Update Function
 void solaris::update(){
-
     this->pollEvents();
     switch (gameState) {
         case TITLESCREEN:
+            std::cout << "Current State: TITLESCREEN"<< std::endl;
             titlescreen_update();
             break;
         case OUTERSPACE:
+            std::cout << "Current State: OUTERSPACE"<< std::endl;
             outerspace_update();
             break;
         case SHIP:
+            std::cout << "Current State: SHIP"<< std::endl;
             ship_update();
             break;
         case PAUSED:
+            std::cout << "Current State: PAUSED"<< std::endl;
             paused_update();
             break;
     }

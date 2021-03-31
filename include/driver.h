@@ -206,6 +206,11 @@ class solaris {
 
 		bool keyDown;
 
+		bool animStart;
+		float currFrame;
+		float lastFrame;
+
+
 		// Ray testing
 		Ray ray1;
 		CircleShape pt;

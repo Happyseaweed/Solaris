@@ -33,6 +33,7 @@ void solaris::outerspace_logic(){
     else if (this->astro.getGlobalBounds().left < 0 || this->astro.getGlobalBounds().left+this->astro.getGlobalBounds().width > SPACE_WIDTH){
         this->astroVel.x *= -2;
     } else {
+        //astroSpeed = 100;
         // movement for ship
         if (Keyboard::isKeyPressed(Keyboard::Key::W)){
             astroApplyForce(Vector2f(0, -astroSpeed));
@@ -75,10 +76,8 @@ void solaris::outerspace_logic(){
     habitatPos.y += habTexture.getSize().y/2;
 
     // Get velocity
-    blockVel.x = astroVel.x*2;
-    blockVel.y = astroVel.y*2;
-    astroVel.x *= -0.2;
-    astroVel.y *= -0.2;
+    //astroVel.x *= -0.2;
+    //astroVel.y *= -0.2;
     
 
     if (!Keyboard::isKeyPressed(Keyboard::Key::M))
@@ -97,8 +96,42 @@ void solaris::outerspace_logic(){
     if (dist < 150){
         intRange = true;
         interactionButton.setPosition(Vector2f(habitatPos.x, habitatPos.y+100));
+        animStart = true;
+        if (animStart && currFrame < 250){
+            currFrame++;
+            lastFrame=currFrame;
+            float scaleF = interactionCurve(10*(currFrame/250));
+            Vector2f scale(scaleF, scaleF);
+            interactionButton.setScale(scale);
+            std::cout << currFrame << std::endl;
+            std::cout << "scale: " << scale.x << "scaleF: " << scaleF << std::endl;
+            if (currFrame >= 250) {
+                std::cout << scale.x << std::endl;
+                currFrame = 251;
+                lastFrame=currFrame;
+                interactionButton.setScale(Vector2f(1, 1));
+            }
+        }
     }else{
+        
         intRange = false;
+        if (animStart){
+            intRange=true;
+            //currFrame=250;
+            currFrame--;
+            std::cout << "lastFrame: " << lastFrame << std::endl;
+            float scaleF = interactionCurve(10*(currFrame/lastFrame));
+            Vector2f scale(scaleF, scaleF);
+            interactionButton.setScale(scale);
+            if (currFrame <= 0) {
+                animStart=false;
+                intRange=false;
+                currFrame=0;
+                interactionButton.setScale(Vector2f(1, 1));
+            } 
+        }
+        
+        //animStart = false;
     }
 }
 
@@ -150,6 +183,19 @@ void solaris::outerspace_update(){
     this->blocRotVel += this->blocRotAcc;
     // Sprite astroge depending on direction of movement
     // Decided to store sprites seperately, instead of loading them everytime, to prevent glitches
+
+    // moves/trotate ship
+    this->astro.rotate(this->astroRotVel);
+    this->astro.move(this->astroVel);
+
+    // disapating forces
+    this->astroVel.x *= 0.99;
+    this->astroVel.y *= 0.99;
+    this->astroRotVel *= 0.8;
+    if (abs(this->astroVel.x) < 0.1) this->astroVel.x = 0;
+    if (abs(this->astroVel.y) < 0.1) this->astroVel.y = 0;
+    if (abs(this->astroRotVel) < 0.2) this->astroRotVel = 0;
+
     if (this->astroVel.x > 0){
         this->astro.setTexture(astroRightTex);
     } else {
@@ -176,4 +222,6 @@ void solaris::outerspace_update(){
     miniPlayer.setPosition(convertPos);
     miniPlayer.setColor(sf::Color(255, 255, 255, showMap*255));
     miniSprite.setColor(sf::Color(255, 255, 255, showMap*255));
+
+    // Interaction button
 }

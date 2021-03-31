@@ -4,7 +4,7 @@
     {
       "label": "Build & Run",
       "type": "shell",
-      "command": "g++ -c src/*.cpp  -std=c++11 -stdlib=libc++ -I ~/SFML/include && g++ -o sfml-app *.o -lsfml-graphics -lsfml-window -lsfml-system && ./sfml-app",
+      "command": "g++ -w -c src/*.cpp  -std=c++11 -stdlib=libc++ -I ~/SFML/include && g++ -o sfml-app *.o -lsfml-graphics -lsfml-window -lsfml-system && ./sfml-app",
       "group": {
         "kind": "build",
         "isDefault": true

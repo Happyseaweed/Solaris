@@ -204,6 +204,13 @@ class solaris {
 		Vector2f astroVel;
 		Shader shader;
 
+		bool keyDown;
+
+		bool animStart;
+		float currFrame;
+		float lastFrame;
+
+
 		// Ray testing
 		Ray ray1;
 		CircleShape pt;
@@ -225,8 +232,12 @@ class solaris {
 		Texture oTank;
 
 		Texture miniTex;
+		Texture miniPlayerTex;
 		Sprite miniSprite;
+		Sprite miniPlayer;
+		float showMap;
 
+		
 		Sprite oxygenTank100;
 		Sprite oxygenTank75;
 		Sprite oxygenTank50;
@@ -238,6 +249,9 @@ class solaris {
 
 		Texture healthB;
 		Sprite healthBar;
+		
+		Texture oxygenB;
+		Sprite oxygenBar;
 
 		Vector2f astroAcc;
 		float astroRotVel;
@@ -251,7 +265,6 @@ class solaris {
 		View camera;
 		View guiView;
 		View miniView;
-		CircleShape miniPlayer;
 		float SPACE_WIDTH;
 		float SPACE_HEIGHT;
 		float astroSpeed;
@@ -299,6 +312,7 @@ class solaris {
 		void render();
 		void update();
 		void pollEvents();
+		float interactionCurve(float t);
 };
 
 // No one knows why tf this is here

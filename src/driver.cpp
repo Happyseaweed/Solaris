@@ -575,6 +575,7 @@ void solaris::outerspace_update(){
 
     // MINIMAP
     miniPlayer.setPosition(sf::Vector2f (astro.getPosition().x / 0.6, astro.getPosition().y / 0.6));
+    cout << "ahmed is smol pp" << endl;
 }
 
 // Ship screens
